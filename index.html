@@ -804,6 +804,17 @@ function shuffle(array){
   }
   return array;
 }
+function shuffleChoicesKeepAnswer(q){
+  // q: { choices:[], answer:int, ... }
+  const pairs = q.choices.map((text, idx) => ({ text, idx }));
+  for(let i=pairs.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [pairs[i], pairs[j]] = [pairs[j], pairs[i]];
+  }
+  q.choices = pairs.map(p => p.text);
+  q.answer = pairs.findIndex(p => p.idx === q.answer);
+  return q;
+}
 
 function formatDT(d){
   // Local string w/ seconds
@@ -827,7 +838,10 @@ function startGame(){
   if(!name){ alert("Please enter your full name."); return; }
 
   // Build shuffled question list
-  QUESTIONS = shuffle(QUESTIONS_RAW.map(q => ({...q})));
+  QUESTIONS = shuffle(
+  QUESTIONS_RAW.map(q => shuffleChoicesKeepAnswer({ ...q }))
+);
+
 
   idx = 0;
   attempts = 0;
