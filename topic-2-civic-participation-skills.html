@@ -245,7 +245,9 @@ answer:0,explanation:"Critical analysis prevents false beliefs."}
 ];
 
 // ===== ENGINE =====
-let QUESTIONS = QUESTIONS_RAW.sort(()=>Math.random()-0.5);
+let QUESTIONS = QUESTIONS_RAW
+  .map(q => shuffleChoicesKeepAnswer({ ...q }))
+  .sort(()=>Math.random()-0.5);
 let i=0,attempts=0,misses=0,seconds=0,timer;
 
 function startGame(){
