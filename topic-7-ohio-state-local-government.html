@@ -1,3 +1,219 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Topic 7 — Ohio’s State & Local Governments (CS16–17)</title>
+
+<style>
+:root{
+  --bg:#0b1220;
+  --text:#e7eefc;
+  --muted:#a8b4cf;
+  --border:rgba(255,255,255,.12);
+  --accent:#7aa2ff;
+  --good:#2bd576;
+  --bad:#ff5c7a;
+  --shadow:0 18px 55px rgba(0,0,0,.35);
+  --radius:18px;
+  --radius2:14px;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Courier New";
+  --sans: system-ui, -apple-system, Segoe UI, Roboto, Arial;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:radial-gradient(900px 500px at 20% 20%,rgba(122,162,255,.18),transparent 60%),var(--bg);
+  color:var(--text);
+  font-family:var(--sans);
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+}
+.app{
+  width:min(980px,100%);
+  background:rgba(0,0,0,.25);
+  border:1px solid var(--border);
+  border-radius:22px;
+  box-shadow:var(--shadow);
+  overflow:hidden;
+}
+header{
+  padding:18px;
+  border-bottom:1px solid var(--border);
+}
+h1{margin:0;font-size:18px}
+.sub{color:var(--muted);font-size:13px;margin-top:6px}
+
+main{padding:18px}
+
+.card{
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:16px;
+}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:760px){.grid2{grid-template-columns:1fr}}
+
+label{font-size:13px;color:var(--muted)}
+input{
+  width:100%;
+  padding:12px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background:rgba(0,0,0,.3);
+  color:var(--text);
+}
+
+button{
+  padding:12px 14px;
+  border-radius:14px;
+  border:1px solid var(--border);
+  background:rgba(122,162,255,.15);
+  color:var(--text);
+  font-weight:600;
+  cursor:pointer;
+}
+button:hover{background:rgba(122,162,255,.25)}
+
+.stats{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.stat{
+  flex:1 1 180px;
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:10px;
+  background:rgba(255,255,255,.04);
+}
+.stat .k{color:var(--muted);font-size:12px}
+.stat .v{font-family:var(--mono)}
+
+.qbox{margin-top:16px}
+.qtop{display:flex;justify-content:space-between;color:var(--muted);font-size:12px}
+.qtext{font-size:16px;margin-top:10px}
+
+.choices{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:14px;
+}
+@media(max-width:760px){.choices{grid-template-columns:1fr}}
+
+.choice{
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:12px;
+  background:rgba(0,0,0,.25);
+  cursor:pointer;
+  text-align:left;
+}
+.choice:hover{border-color:var(--accent)}
+.choice .tag{font-family:var(--mono);font-size:12px;color:var(--muted);margin-bottom:6px}
+
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.6);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+}
+.modal.hidden{display:none!important}
+.modalBox{
+  background:#0b1220;
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:18px;
+  width:min(600px,100%);
+}
+.modalBox h3{margin-top:0}
+
+.ticket{
+  margin-top:18px;
+  border:1px dashed rgba(255,255,255,.3);
+  border-radius:14px;
+  padding:14px;
+  font-family:var(--mono);
+  font-size:12px;
+  white-space:pre-wrap;
+}
+.ok{color:var(--good)}
+.bad{color:var(--bad)}
+</style>
+</head>
+
+<body>
+<div class="app">
+
+<header>
+  <h1>Topic 7 — Ohio’s State & Local Governments (CS16–17)</h1>
+  <div class="sub">100% first-try accuracy required • Wrong answers show explanation until corrected</div>
+</header>
+
+<main>
+
+  <div class="card" id="setup">
+    <div class="grid2">
+      <div>
+        <label>Student Name</label>
+        <input id="name" />
+      </div>
+      <div>
+        <button id="startBtn">Start Game</button>
+        <button id="resetBtn">Reset</button>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><div class="k">Date</div><div class="v" id="dateS">—</div></div>
+      <div class="stat"><div class="k">Start</div><div class="v" id="startT">—</div></div>
+      <div class="stat"><div class="k">Finish</div><div class="v" id="finishT">—</div></div>
+      <div class="stat"><div class="k">Timer</div><div class="v" id="timer">00:00</div></div>
+      <div class="stat"><div class="k">Accuracy</div><div class="v" id="acc">—</div></div>
+      <div class="stat"><div class="k">Progress</div><div class="v" id="prog">—</div></div>
+    </div>
+  </div>
+
+  <div class="card qbox" id="game" style="display:none">
+    <div class="qtop">
+      <div id="qnum"></div>
+      <div id="cs"></div>
+    </div>
+    <div class="qtext" id="qtext"></div>
+    <div class="choices" id="choices"></div>
+  </div>
+
+  <div class="ticket" id="ticket" style="display:none"></div>
+
+</main>
+</div>
+
+<div class="modal hidden" id="modal">
+  <div class="modalBox">
+    <h3>Not Correct — Explanation</h3>
+    <p id="exp"></p>
+    <button id="closeM">Try Again</button>
+  </div>
+</div>
+
+<script>
+function pad(n){return String(n).padStart(2,"0")}
+function timeFmt(s){return pad(Math.floor(s/60))+":"+pad(s%60)}
+function formatDate(d){
+  // Feb 18, 2026
+  return d.toLocaleDateString(undefined,{year:"numeric",month:"short",day:"numeric"});
+}
+function formatTime(d){
+  // 9:14:05 AM
+  return d.toLocaleTimeString(undefined,{hour:"numeric",minute:"2-digit",second:"2-digit"});
+}
+function shuffle(a){for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}}
+
 const QUESTIONS=[
 
 // ======================
@@ -79,3 +295,149 @@ const QUESTIONS=[
 {cs:"CS17",q:"Local governments are important because they:",c:["Handle community needs","Declare war","Print national currency","Negotiate treaties"],a:0,e:"Local governments manage schools, roads, and safety."}
 
 ];
+
+
+let state={
+  i:0,
+  sec:0,
+  timer:null,
+  name:"",
+  correct:0,   // correct selections (only increments when they pick correct)
+  attempts:0,  // counts ALL answer clicks (correct or wrong)
+  startedAt:null,
+  finishedAt:null
+};
+
+const nameI=document.getElementById("name");
+const startBtn=document.getElementById("startBtn");
+const resetBtn=document.getElementById("resetBtn");
+const game=document.getElementById("game");
+const setup=document.getElementById("setup");
+const qnum=document.getElementById("qnum");
+const cs=document.getElementById("cs");
+const qtext=document.getElementById("qtext");
+const choices=document.getElementById("choices");
+const timer=document.getElementById("timer");
+const acc=document.getElementById("acc");
+const prog=document.getElementById("prog");
+const dateS=document.getElementById("dateS");
+const startT=document.getElementById("startT");
+const finishT=document.getElementById("finishT");
+const modal=document.getElementById("modal");
+const exp=document.getElementById("exp");
+const closeM=document.getElementById("closeM");
+const ticket=document.getElementById("ticket");
+
+function update(){
+  // Progress as current question number / total (when in-game)
+  const total = QUESTIONS.length;
+  const shownIndex = Math.min(state.i + 1, total); // prevents 16/15 on finish moment
+  prog.textContent = `${shownIndex}/${total}`;
+
+  // Accuracy based on attempts (true accuracy)
+  const pct = state.attempts ? Math.round((state.correct/state.attempts)*100) : 100;
+  acc.textContent = `${pct}%`;
+
+  // Question header shows X/X too
+  qnum.textContent = `Question ${shownIndex}/${total}`;
+}
+
+function render(){
+  const q=QUESTIONS[state.i];
+  cs.textContent=q.cs;
+  qtext.textContent=q.q;
+
+  // shuffle choices while preserving which is correct for this render
+  let opts=q.c.map((t,idx)=>({t,idx}));
+  shuffle(opts);
+  let correctIndex=opts.findIndex(o=>o.idx===q.a);
+
+  choices.innerHTML="";
+  opts.forEach((o,i)=>{
+    let b=document.createElement("button");
+    b.className="choice";
+    b.type="button";
+    b.innerHTML=`<div class="tag">${String.fromCharCode(65+i)}</div>${o.t}`;
+
+    b.onclick=()=>{
+      state.attempts++;
+
+      if(i===correctIndex){
+        state.correct++;
+        state.i++;
+        update();
+        if(state.i<QUESTIONS.length) render();
+        else finish();
+      }else{
+        update();
+        exp.textContent=q.e;
+        modal.classList.remove("hidden");
+      }
+    };
+
+    choices.appendChild(b);
+  });
+
+  update();
+}
+
+function start(){
+  if(!nameI.value.trim()) return alert("Enter name");
+  state.name=nameI.value.trim();
+  state.i=0;
+  state.correct=0;
+  state.attempts=0;
+  state.sec=0;
+  state.startedAt=new Date();
+  state.finishedAt=null;
+
+  // stamps
+  dateS.textContent = formatDate(state.startedAt);
+  startT.textContent = formatTime(state.startedAt);
+  finishT.textContent = "—";
+
+  // show sections
+  setup.style.display="none";
+  game.style.display="block";
+
+  // timer
+  if(state.timer) clearInterval(state.timer);
+  timer.textContent="00:00";
+  state.timer=setInterval(()=>{state.sec++;timer.textContent=timeFmt(state.sec)},1000);
+
+  render();
+}
+
+function finish(){
+  clearInterval(state.timer);
+  state.finishedAt = new Date();
+  finishT.textContent = formatTime(state.finishedAt);
+
+  // must be perfect: correct on every first try => attempts must equal total
+  // (because any wrong click adds an attempt without adding a correct)
+  const total = QUESTIONS.length;
+  const perfect = (state.correct===total) && (state.attempts===total);
+
+  if(!perfect){
+    alert("Must finish with 100% first-try accuracy. Reset and try again.");
+    return;
+  }
+
+  ticket.style.display="block";
+  ticket.textContent =
+`TOPIC 7 SUBMIT TICKET
+Name: ${state.name}
+Date: ${formatDate(state.startedAt)}
+Start: ${formatTime(state.startedAt)}
+Finish: ${formatTime(state.finishedAt)}
+Time: ${timer.textContent}
+Accuracy: 100% (${total}/${total})`;
+}
+
+startBtn.onclick=start;
+resetBtn.onclick=()=>location.reload();
+closeM.onclick=()=>modal.classList.add("hidden");
+</script>
+
+</body>
+</html>
