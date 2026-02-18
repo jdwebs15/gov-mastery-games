@@ -105,10 +105,11 @@ button:hover{opacity:.9}
 <!-- GAME -->
 <div id="gameScreen" class="hidden">
 <div class="stats">
-<div>Name: <span id="nameOut"></span></div>
-<div>Timer: <span id="timerOut">0:00</span></div>
-<div>Attempts: <span id="attemptsOut">0</span></div>
-<div>Misses: <span id="missesOut">0</span></div>
+  <div>Name: <span id="nameOut"></span></div>
+  <div>Timer: <span id="timerOut">0:00</span></div>
+  <div>Question: <span id="qOut">0/0</span></div>
+  <div>Attempts: <span id="attemptsOut">0</span></div>
+  <div>Misses: <span id="missesOut">0</span></div>
 </div>
 
 <h2 id="questionText"></h2>
@@ -310,10 +311,10 @@ function finish(){
   location.reload();
   return;
  }
- document.getElementById("gameScreen").classList.add("hidden");
- document.getElementById("endScreen").classList.remove("hidden");
- document.getElementById("endName").textContent=document.getElementById("nameOut").textContent;
- document.getElementById("totalTime").textContent=document.getElementById("timerOut").textContent;
+ document.getElementById("attemptsOut").textContent="0";
+document.getElementById("missesOut").textContent="0";
+document.getElementById("timerOut").textContent="0:00";
+document.getElementById("qOut").textContent = `1/${QUESTIONS.length}`;
 }
 </script>
 
