@@ -16,7 +16,6 @@
   --bad:#ff5c7a;
   --shadow:0 18px 55px rgba(0,0,0,.35);
   --radius:18px;
-  --radius2:14px;
   --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Courier New";
   --sans: system-ui, -apple-system, Segoe UI, Roboto, Arial;
 }
@@ -46,7 +45,6 @@ header{
 }
 h1{margin:0;font-size:18px}
 .sub{color:var(--muted);font-size:13px;margin-top:6px}
-
 main{padding:18px}
 
 .card{
@@ -75,7 +73,7 @@ button{
   border:1px solid var(--border);
   background:rgba(122,162,255,.15);
   color:var(--text);
-  font-weight:600;
+  font-weight:700;
   cursor:pointer;
 }
 button:hover{background:rgba(122,162,255,.25)}
@@ -92,7 +90,7 @@ button:hover{background:rgba(122,162,255,.25)}
 .stat .v{font-family:var(--mono)}
 
 .qbox{margin-top:16px}
-.qtop{display:flex;justify-content:space-between;color:var(--muted);font-size:12px}
+.qtop{display:flex;justify-content:space-between;color:var(--muted);font-size:12px;gap:10px;flex-wrap:wrap}
 .qtext{font-size:16px;margin-top:10px}
 
 .choices{
@@ -129,7 +127,7 @@ button:hover{background:rgba(122,162,255,.25)}
   border:1px solid var(--border);
   border-radius:18px;
   padding:18px;
-  width:min(600px,100%);
+  width:min(650px,100%);
 }
 .modalBox h3{margin-top:0}
 
@@ -142,54 +140,55 @@ button:hover{background:rgba(122,162,255,.25)}
   font-size:12px;
   white-space:pre-wrap;
 }
-.ok{color:var(--good)}
-.bad{color:var(--bad)}
+.hidden{display:none!important}
+small{color:var(--muted)}
 </style>
 </head>
 
 <body>
 <div class="app">
-
 <header>
   <h1>Topic 7 — Ohio’s State & Local Governments (CS16–17)</h1>
-  <div class="sub">100% first-try accuracy required • Wrong answers show explanation until corrected</div>
+  <div class="sub">100% first-try accuracy required • Wrong answers show explanation until corrected • Auto-advance on correct</div>
 </header>
 
 <main>
-
+  <!-- SETUP -->
   <div class="card" id="setup">
     <div class="grid2">
       <div>
         <label>Student Name</label>
-        <input id="name" />
+        <input id="name" placeholder="Type first + last name" autocomplete="off"/>
       </div>
-      <div>
+      <div style="display:flex;gap:10px;align-items:end;flex-wrap:wrap">
         <button id="startBtn">Start Game</button>
         <button id="resetBtn">Reset</button>
       </div>
     </div>
+    <small>Stats will stay visible during the game.</small>
+  </div>
 
-    <div class="stats">
+  <!-- GAME -->
+  <div class="card qbox hidden" id="game">
+    <div class="stats" style="margin-top:0">
+      <div class="stat"><div class="k">Name</div><div class="v" id="nameOut">—</div></div>
       <div class="stat"><div class="k">Date</div><div class="v" id="dateS">—</div></div>
       <div class="stat"><div class="k">Start</div><div class="v" id="startT">—</div></div>
       <div class="stat"><div class="k">Finish</div><div class="v" id="finishT">—</div></div>
       <div class="stat"><div class="k">Timer</div><div class="v" id="timer">00:00</div></div>
-      <div class="stat"><div class="k">Accuracy</div><div class="v" id="acc">—</div></div>
+      <div class="stat"><div class="k">Accuracy (First-Try)</div><div class="v" id="acc">—</div></div>
       <div class="stat"><div class="k">Progress</div><div class="v" id="prog">—</div></div>
     </div>
-  </div>
 
-  <div class="card qbox" id="game" style="display:none">
-    <div class="qtop">
+    <div class="qtop" style="margin-top:14px">
       <div id="qnum"></div>
       <div id="cs"></div>
     </div>
     <div class="qtext" id="qtext"></div>
     <div class="choices" id="choices"></div>
+
+    <div class="ticket hidden" id="ticket"></div>
   </div>
-
-  <div class="ticket" id="ticket" style="display:none"></div>
-
 </main>
 </div>
 
@@ -202,208 +201,173 @@ button:hover{background:rgba(122,162,255,.25)}
 </div>
 
 <script>
+/* ---------- helpers ---------- */
 function pad(n){return String(n).padStart(2,"0")}
 function timeFmt(s){return pad(Math.floor(s/60))+":"+pad(s%60)}
-function formatDate(d){
-  // Feb 18, 2026
-  return d.toLocaleDateString(undefined,{year:"numeric",month:"short",day:"numeric"});
-}
-function formatTime(d){
-  // 9:14:05 AM
-  return d.toLocaleTimeString(undefined,{hour:"numeric",minute:"2-digit",second:"2-digit"});
-}
-function shuffle(a){for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}}
+function formatDate(d){ return d.toLocaleDateString(undefined,{year:"numeric",month:"short",day:"numeric"}); }
+function formatTime(d){ return d.toLocaleTimeString(undefined,{hour:"numeric",minute:"2-digit",second:"2-digit"}); }
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}}
 
-const QUESTIONS=[
+/* ---------- QUESTIONS (28) ---------- */
+const QUESTIONS = [
+  // FOUNDATIONS & SIMILARITIES (CS16)
+  {cs:"CS16", q:"Which principle is found in BOTH the Ohio and U.S. Constitutions?", c:["Separation of powers","Initiative","Elected judges","Term limits for Congress"], a:0, e:"Both constitutions divide power among three branches to prevent abuse."},
+  {cs:"CS16", q:"Both constitutions include a:", c:["Bill of Rights","Parliament","National church","Monarchy"], a:0, e:"Both protect individual liberties (Ohio and U.S. bills of rights)."},
+  {cs:"CS16", q:"Which principle reflects popular sovereignty in BOTH constitutions?", c:["Government rules with the consent of the people through elections","Courts choose leaders","Military chooses leaders","Media chooses leaders"], a:0, e:"Popular sovereignty means power originates with the people."},
+  {cs:"CS16", q:"Federalism in Ohio means:", c:["Power is shared between state and national governments","Power is shared between mayor and governor only","Only local government matters","Congress controls Ohio elections"], a:0, e:"Federalism divides authority between national and state governments."},
 
-// ======================
-// FOUNDATIONS & SIMILARITIES
-// ======================
+  // 1803 CONSTITUTION (CS16)
+  {cs:"CS16", q:"Under the 1803 Constitution, how were judges selected?", c:["Appointed by the legislature","Elected by voters","Appointed by governor alone","Chosen by citizens in referendum"], a:0, e:"In 1803, judges were appointed by the General Assembly, not elected."},
+  {cs:"CS16", q:"Under the 1803 Constitution, who held the most power?", c:["The legislature (General Assembly)","The governor","The courts","Local governments"], a:0, e:"Ohio’s 1803 system was legislature-dominated."},
+  {cs:"CS16", q:"One weakness of the 1803 Constitution was that it:", c:["Gave too much power to the legislature","Created too strong a governor","Eliminated elections entirely","Banned courts"], a:0, e:"The legislature had outsized control over government functions."},
+  {cs:"CS16", q:"Why was the governor weaker under the 1803 Constitution?", c:["Limited veto power and short term","Controlled all taxation","Appointed all officials directly","Could dissolve the legislature"], a:0, e:"The governor had limited authority compared to modern expectations."},
 
-{cs:"CS16",q:"Which principle is found in BOTH the Ohio and U.S. Constitutions?",c:["Separation of powers","Initiative","Elected judges","Term limits for Congress"],a:0,e:"Both constitutions divide power among three branches to prevent abuse of authority."},
+  // REASONS FOR CHANGE (1851) (CS16)
+  {cs:"CS16", q:"Why did Ohio call a constitutional convention in 1851?", c:["Government was inefficient and overly legislature-dominated","To eliminate elections","To end local government","To remove the bill of rights"], a:0, e:"Reforms aimed to fix inefficiency and imbalance of power."},
+  {cs:"CS16", q:"One major complaint before 1851 was:", c:["Legislative corruption and debt problems","Too many executive orders","Too much direct democracy","Courts controlled spending"], a:0, e:"Concerns centered on legislative overreach and financial issues."},
+  {cs:"CS16", q:"Ohio’s rising state debt in the 1840s contributed to:", c:["Calls for constitutional reform","Eliminating elections","Ending public education","U.S. Supreme Court intervention"], a:0, e:"Financial problems pushed reformers to restructure government."},
 
-{cs:"CS16",q:"Both constitutions include a:",c:["Bill of Rights","Parliament","National church","Monarchy"],a:0,e:"Both contain a Bill of Rights protecting individual liberties."},
+  // 1851 SOLUTIONS/CHANGES (CS16)
+  {cs:"CS16", q:"How did the 1851 Constitution change judicial selection?", c:["Judges became elected","Judges became lifetime appointees","Judges were chosen by Congress","Judges were selected by the governor alone"], a:0, e:"The 1851 Constitution required judges to be elected."},
+  {cs:"CS16", q:"The 1851 Constitution limited state debt by:", c:["Restricting borrowing without voter approval","Eliminating taxation","Giving full control to the governor","Removing courts"], a:0, e:"Debt controls and voter involvement were key reforms."},
+  {cs:"CS16", q:"Which reform reduced legislative dominance in 1851?", c:["Separating election of executive officials from the legislature","Letting the legislature appoint all executives","Ending elections","Voters began electing executive officials independently"], a:0, e:"Voters gained more direct control over executive offices."},
+  {cs:"CS16", q:"The initiative and referendum process in Ohio allows citizens to:", c:["Propose or repeal laws directly","Appoint judges","Create the U.S. Supreme Court","Select governors without elections"], a:0, e:"Initiative/referendum expanded direct democracy."},
+  {cs:"CS16", q:"Which statement best summarizes 1803 vs 1851?", c:["1851 expanded voter control and limited legislative power","1803 expanded voter control and limited legislative power","1851 removed elections","1803 created direct democracy"], a:0, e:"1851 strengthened popular control and reduced legislative dominance."},
+  {cs:"CS16", q:"Both the 1803 and 1851 Constitutions:", c:["Established three branches of government","Allowed monarchy","Eliminated elections","Gave federal courts control"], a:0, e:"Both created legislative, executive, and judicial branches."},
 
-{cs:"CS16",q:"Which principle reflects popular sovereignty in BOTH constitutions?",c:["People elect representatives","Courts appoint leaders","Military chooses leaders","Governor rules without election"],a:0,e:"Power originates with the people through elections."},
+  // SIMILARITIES/DIFFERENCES (CS16)
+  {cs:"CS16", q:"Which is a difference between the Ohio and U.S. Constitutions?", c:["Ohio Constitution is longer and more detailed","U.S. Constitution is longer and more detailed","Ohio has no bill of rights","U.S. has initiative and referendum"], a:0, e:"State constitutions often include more detailed rules and procedures."},
+  {cs:"CS16", q:"Which is MOST likely included in a state constitution (Ohio) but not in the U.S. Constitution?", c:["Detailed rules for local governments and elections","Treaty power","Declaring war","Regulating foreign commerce"], a:0, e:"State constitutions often contain detailed government structure rules."},
+  {cs:"CS16", q:"Term limits in Ohio (added later) most directly reflect a goal to:", c:["Limit long-term legislative power","Eliminate elections","Strengthen monarchy","End judicial review"], a:0, e:"Term limits try to prevent entrenched political power."},
 
-{cs:"CS16",q:"Federalism in Ohio means:",c:["Power is shared between state and national governments","Cities control the U.S. government","Ohio overrides federal law","The governor controls Congress"],a:0,e:"Federalism divides power between state and national governments."},
-
-// ======================
-// 1803 CONSTITUTION
-// ======================
-
-{cs:"CS16",q:"Under the 1803 Constitution, how were judges selected?",c:["Appointed by legislature","Elected by voters","Appointed by governor alone","Chosen by citizens in referendum"],a:0,e:"In 1803, judges were appointed by the General Assembly, not elected by voters."},
-
-{cs:"CS16",q:"Under the 1803 Constitution, who held the most power?",c:["The legislature","The governor","The courts","Local governments"],a:0,e:"The General Assembly dominated state government under the 1803 Constitution."},
-
-{cs:"CS16",q:"One weakness of the 1803 Constitution was that it:",c:["Gave too much power to the legislature","Allowed too much citizen control","Eliminated checks and balances","Prevented amendments"],a:0,e:"The legislature had excessive control over courts and executive offices."},
-
-{cs:"CS16",q:"Why was the governor weaker under the 1803 Constitution?",c:["Limited veto power and short term","Too much military control","Appointed all officials","Controlled taxation"],a:0,e:"The governor had limited authority and short terms under 1803."},
-
-// ======================
-// REASONS FOR CHANGE (1851)
-// ======================
-
-{cs:"CS16",q:"Why did Ohio call a constitutional convention in 1850?",c:["Government was inefficient and overly legislative-dominated","To eliminate elections","To remove the Bill of Rights","To increase federal control"],a:0,e:"Citizens believed the legislature held too much power and reforms were needed."},
-
-{cs:"CS16",q:"Public frustration before 1851 focused primarily on:",c:["Legislative corruption and debt","Too many elections","Excess executive authority","Judicial independence"],a:0,e:"Concerns centered on legislative control and state financial problems."},
-
-{cs:"CS16",q:"Ohio’s rising state debt in the 1840s contributed to:",c:["Demand for financial reform in the 1851 Constitution","Abolishing taxation","Removing courts","Federal takeover"],a:0,e:"Financial mismanagement pushed reformers to limit legislative spending."},
-
-// ======================
-// SOLUTIONS IN 1851
-// ======================
-
-{cs:"CS16",q:"How did the 1851 Constitution change judicial selection?",c:["Judges became elected by voters","Judges remained appointed","Judges were federally appointed","Judges were chosen by governor alone"],a:0,e:"The 1851 Constitution required judges to be elected."},
-
-{cs:"CS16",q:"The 1851 Constitution limited state debt by:",c:["Restricting borrowing without voter approval","Eliminating taxation","Giving full control to governor","Removing legislature"],a:0,e:"Debt restrictions were added to prevent financial abuse."},
-
-{cs:"CS16",q:"Which reform reduced legislative dominance in 1851?",c:["Separating election of executive officials","Giving legislature more judges","Eliminating courts","Ending elections"],a:0,e:"Voters began electing executive officials independently of the legislature."},
-
-{cs:"CS16",q:"The initiative and referendum process introduced in Ohio allows citizens to:",c:["Propose or repeal laws directly","Appoint judges","Override U.S. Supreme Court","Select governor without election"],a:0,e:"Initiative and referendum expanded direct democracy."},
-
-// ======================
-// COMPARISONS
-// ======================
-
-{cs:"CS16",q:"Which statement best compares the 1803 and 1851 Constitutions?",c:["1851 increased voter control and limited legislative power","1851 strengthened legislative dominance","1803 allowed direct democracy","Both eliminated elections"],a:0,e:"The 1851 Constitution expanded citizen influence and limited legislature."},
-
-{cs:"CS16",q:"Unlike 1803, the 1851 Constitution:",c:["Required more officials to be elected","Eliminated courts","Removed separation of powers","Ended the governor’s role"],a:0,e:"More officials became directly accountable to voters."},
-
-{cs:"CS16",q:"Both the 1803 and 1851 Constitutions:",c:["Established three branches of government","Allowed monarchy","Eliminated elections","Gave federal courts control"],a:0,e:"Both created legislative, executive, and judicial branches."},
-
-{cs:"CS16",q:"Which reform shows increased democratic participation in 1851?",c:["Electing judges","Appointing judges","Extending legislative terms","Eliminating referendums"],a:0,e:"Judicial elections increased direct voter control."},
-
-// ======================
-// CIVIC RESPONSIBILITIES (CS17)
-// ======================
-
-{cs:"CS17",q:"Which action best demonstrates civic responsibility?",c:["Voting in elections","Ignoring laws","Avoiding jury duty","Not paying taxes"],a:0,e:"Voting helps citizens participate in democracy."},
-
-{cs:"CS17",q:"Serving on a jury supports government by:",c:["Ensuring fair trials","Electing judges","Writing laws","Approving budgets"],a:0,e:"Juries are essential to administering justice."},
-
-{cs:"CS17",q:"Attending city council meetings allows citizens to:",c:["Influence local policy","Declare war","Print money","Override courts"],a:0,e:"Public meetings provide input opportunities."},
-
-{cs:"CS17",q:"Paying taxes is important because taxes:",c:["Fund public services","Choose leaders","Create amendments","Appoint officials"],a:0,e:"Taxes support essential services."},
-
-{cs:"CS17",q:"Contacting elected officials is significant because it:",c:["Communicates public concerns","Cancels elections","Removes courts","Overrides the Constitution"],a:0,e:"Communication influences policy decisions."},
-
-{cs:"CS17",q:"Volunteering in the community demonstrates:",c:["Active civic participation","Judicial review","Federal supremacy","Nullification"],a:0,e:"Volunteering supports community and democratic values."},
-
-{cs:"CS17",q:"Which responsibility directly strengthens democracy?",c:["Registering to vote","Avoiding taxes","Skipping jury duty","Ignoring public meetings"],a:0,e:"Participation strengthens representative government."},
-
-{cs:"CS17",q:"Local governments are important because they:",c:["Handle community needs","Declare war","Print national currency","Negotiate treaties"],a:0,e:"Local governments manage schools, roads, and safety."}
-
+  // CIVIC RESPONSIBILITIES (CS17)
+  {cs:"CS17", q:"Which action best demonstrates civic responsibility?", c:["Voting in elections","Ignoring laws","Avoiding jury duty","Not paying taxes"], a:0, e:"Voting is a key way citizens assist government."},
+  {cs:"CS17", q:"Why is serving on a jury important?", c:["Ensures fair trials","Elects judges","Creates laws","Approves budgets"], a:0, e:"Juries help administer justice and protect rights."},
+  {cs:"CS17", q:"Which responsibility directly supports democracy?", c:["Registering to vote","Ignoring laws","Skipping jury duty","Avoiding taxes"], a:0, e:"Participation strengthens representative government."},
+  {cs:"CS17", q:"Paying taxes supports government because taxes:", c:["Fund public services","Choose leaders","Write laws","Appoint judges"], a:0, e:"Taxes fund services like roads, schools, and police."},
+  {cs:"CS17", q:"Contacting elected officials matters because it:", c:["Expresses citizen concerns and can influence policy","Overrides courts automatically","Creates amendments instantly","Cancels elections"], a:0, e:"Communication is a form of civic input."},
+  {cs:"CS17", q:"Which action allows citizens to influence local policy most directly?", c:["Attending city council meetings","Watching TV","Posting anonymously","Avoiding officials"], a:0, e:"Local meetings provide direct input."},
+  {cs:"CS17", q:"Local governments are important because they:", c:["Handle community needs like roads, safety, and services","Declare war","Print money","Negotiate treaties"], a:0, e:"Local governments provide essential services closest to citizens."}
 ];
 
-
-let state={
+/* ---------- state ---------- */
+let state = {
   i:0,
   sec:0,
   timer:null,
   name:"",
-  correct:0,   // correct selections (only increments when they pick correct)
-  attempts:0,  // counts ALL answer clicks (correct or wrong)
+  firstTryCorrect:0,
+  hadMiss:false,
   startedAt:null,
   finishedAt:null
 };
 
-const nameI=document.getElementById("name");
-const startBtn=document.getElementById("startBtn");
-const resetBtn=document.getElementById("resetBtn");
-const game=document.getElementById("game");
-const setup=document.getElementById("setup");
-const qnum=document.getElementById("qnum");
-const cs=document.getElementById("cs");
-const qtext=document.getElementById("qtext");
-const choices=document.getElementById("choices");
-const timer=document.getElementById("timer");
-const acc=document.getElementById("acc");
-const prog=document.getElementById("prog");
-const dateS=document.getElementById("dateS");
-const startT=document.getElementById("startT");
-const finishT=document.getElementById("finishT");
-const modal=document.getElementById("modal");
-const exp=document.getElementById("exp");
-const closeM=document.getElementById("closeM");
-const ticket=document.getElementById("ticket");
+const elSetup = document.getElementById("setup");
+const elGame  = document.getElementById("game");
 
-function update(){
-  // Progress as current question number / total (when in-game)
+const nameI   = document.getElementById("name");
+const nameOut = document.getElementById("nameOut");
+const startBtn= document.getElementById("startBtn");
+const resetBtn= document.getElementById("resetBtn");
+
+const qnum    = document.getElementById("qnum");
+const cs      = document.getElementById("cs");
+const qtext   = document.getElementById("qtext");
+const choices = document.getElementById("choices");
+
+const timerEl = document.getElementById("timer");
+const accEl   = document.getElementById("acc");
+const progEl  = document.getElementById("prog");
+
+const dateS   = document.getElementById("dateS");
+const startT  = document.getElementById("startT");
+const finishT = document.getElementById("finishT");
+
+const modal   = document.getElementById("modal");
+const exp     = document.getElementById("exp");
+const closeM  = document.getElementById("closeM");
+const ticket  = document.getElementById("ticket");
+
+function updateStats(){
   const total = QUESTIONS.length;
-  const shownIndex = Math.min(state.i + 1, total); // prevents 16/15 on finish moment
-  prog.textContent = `${shownIndex}/${total}`;
-
-  // Accuracy based on attempts (true accuracy)
-  const pct = state.attempts ? Math.round((state.correct/state.attempts)*100) : 100;
-  acc.textContent = `${pct}%`;
-
-  // Question header shows X/X too
-  qnum.textContent = `Question ${shownIndex}/${total}`;
+  const shown = Math.min(state.i + 1, total);
+  progEl.textContent = `${shown}/${total}`;
+  accEl.textContent = `${Math.round((state.firstTryCorrect/total)*100)}%`;
+  qnum.textContent = `Question ${shown}/${total}`;
 }
 
 function render(){
-  const q=QUESTIONS[state.i];
-  cs.textContent=q.cs;
-  qtext.textContent=q.q;
+  const q = QUESTIONS[state.i];
+  state.hadMiss = false;
 
-  // shuffle choices while preserving which is correct for this render
-  let opts=q.c.map((t,idx)=>({t,idx}));
+  cs.textContent = q.cs;
+  qtext.textContent = q.q;
+
+  const opts = q.c.map((t,i)=>({t,i}));
   shuffle(opts);
-  let correctIndex=opts.findIndex(o=>o.idx===q.a);
+  const correctPos = opts.findIndex(o=>o.i===q.a);
 
-  choices.innerHTML="";
-  opts.forEach((o,i)=>{
-    let b=document.createElement("button");
-    b.className="choice";
-    b.type="button";
-    b.innerHTML=`<div class="tag">${String.fromCharCode(65+i)}</div>${o.t}`;
+  choices.innerHTML = "";
+  opts.forEach((o,pos)=>{
+    const btn = document.createElement("button");
+    btn.className = "choice";
+    btn.type = "button";
+    btn.innerHTML = `<div class="tag">${String.fromCharCode(65+pos)}</div>${o.t}`;
 
-    b.onclick=()=>{
-      state.attempts++;
-
-      if(i===correctIndex){
-        state.correct++;
+    btn.onclick = ()=>{
+      if(pos === correctPos){
+        if(!state.hadMiss) state.firstTryCorrect++;
         state.i++;
-        update();
-        if(state.i<QUESTIONS.length) render();
-        else finish();
+        if(state.i < QUESTIONS.length){
+          updateStats();
+          render();
+        }else{
+          finish();
+        }
       }else{
-        update();
-        exp.textContent=q.e;
+        state.hadMiss = true;
+        exp.textContent = q.e;
         modal.classList.remove("hidden");
       }
+      updateStats();
     };
 
-    choices.appendChild(b);
+    choices.appendChild(btn);
   });
 
-  update();
+  updateStats();
 }
 
 function start(){
-  if(!nameI.value.trim()) return alert("Enter name");
-  state.name=nameI.value.trim();
-  state.i=0;
-  state.correct=0;
-  state.attempts=0;
-  state.sec=0;
-  state.startedAt=new Date();
-  state.finishedAt=null;
+  const nm = nameI.value.trim();
+  if(!nm) return alert("Enter your name.");
 
-  // stamps
+  state.name = nm;
+  state.i = 0;
+  state.sec = 0;
+  state.firstTryCorrect = 0;
+  state.hadMiss = false;
+  state.startedAt = new Date();
+  state.finishedAt = null;
+
+  shuffle(QUESTIONS);
+
+  nameOut.textContent = state.name;
   dateS.textContent = formatDate(state.startedAt);
   startT.textContent = formatTime(state.startedAt);
   finishT.textContent = "—";
+  timerEl.textContent = "00:00";
+  ticket.classList.add("hidden");
+  ticket.textContent = "";
 
-  // show sections
-  setup.style.display="none";
-  game.style.display="block";
+  elSetup.classList.add("hidden");
+  elGame.classList.remove("hidden");
 
-  // timer
   if(state.timer) clearInterval(state.timer);
-  timer.textContent="00:00";
-  state.timer=setInterval(()=>{state.sec++;timer.textContent=timeFmt(state.sec)},1000);
+  state.timer = setInterval(()=>{
+    state.sec++;
+    timerEl.textContent = timeFmt(state.sec);
+  },1000);
 
   render();
 }
@@ -413,31 +377,26 @@ function finish(){
   state.finishedAt = new Date();
   finishT.textContent = formatTime(state.finishedAt);
 
-  // must be perfect: correct on every first try => attempts must equal total
-  // (because any wrong click adds an attempt without adding a correct)
-  const total = QUESTIONS.length;
-  const perfect = (state.correct===total) && (state.attempts===total);
-
-  if(!perfect){
-    alert("Must finish with 100% first-try accuracy. Reset and try again.");
+  if(state.firstTryCorrect !== QUESTIONS.length){
+    alert("You finished, but mastery requires 100% FIRST-TRY accuracy. Hit Reset and try again.");
     return;
   }
 
-  ticket.style.display="block";
+  ticket.classList.remove("hidden");
   ticket.textContent =
-`TOPIC 7 SUBMIT TICKET
+`TOPIC 7 — SUBMIT TICKET
 Name: ${state.name}
 Date: ${formatDate(state.startedAt)}
 Start: ${formatTime(state.startedAt)}
 Finish: ${formatTime(state.finishedAt)}
-Time: ${timer.textContent}
-Accuracy: 100% (${total}/${total})`;
+Time: ${timerEl.textContent}
+Accuracy: 100% (First-Try Mastery)
+Questions: ${QUESTIONS.length}/${QUESTIONS.length}`;
 }
 
-startBtn.onclick=start;
-resetBtn.onclick=()=>location.reload();
-closeM.onclick=()=>modal.classList.add("hidden");
+startBtn.onclick = start;
+resetBtn.onclick = ()=>location.reload();
+closeM.onclick = ()=>modal.classList.add("hidden");
 </script>
-
 </body>
 </html>
