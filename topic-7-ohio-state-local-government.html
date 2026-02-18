@@ -14,60 +14,101 @@
 }
 *{box-sizing:border-box}
 body{
-  margin:0; background:radial-gradient(900px 500px at 20% 20%,rgba(122,162,255,.18),transparent 60%),var(--bg);
-  color:var(--text); font-family:var(--sans); min-height:100vh; display:flex; align-items:center; justify-content:center; padding:18px;
+  margin:0;
+  background:radial-gradient(900px 500px at 20% 20%,rgba(122,162,255,.18),transparent 60%),var(--bg);
+  color:var(--text);
+  font-family:var(--sans);
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
 }
 .app{
-  width:min(980px,100%); background:rgba(0,0,0,.25); border:1px solid var(--border);
-  border-radius:22px; box-shadow:var(--shadow); overflow:hidden;
+  width:min(980px,100%);
+  background:rgba(0,0,0,.25);
+  border:1px solid var(--border);
+  border-radius:22px;
+  box-shadow:var(--shadow);
+  overflow:hidden;
 }
 header{padding:18px;border-bottom:1px solid var(--border)}
 h1{margin:0;font-size:18px}
 .sub{color:var(--muted);font-size:13px;margin-top:6px}
 main{padding:18px}
+
 .card{
-  background:rgba(255,255,255,.04); border:1px solid var(--border); border-radius:var(--radius); padding:16px;
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:16px;
 }
+
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 @media(max-width:760px){.grid2{grid-template-columns:1fr}}
+
 label{font-size:13px;color:var(--muted)}
 input{
   width:100%; padding:12px; border-radius:12px; border:1px solid var(--border);
   background:rgba(0,0,0,.3); color:var(--text);
 }
+
 button{
   padding:12px 14px; border-radius:14px; border:1px solid var(--border);
-  background:rgba(122,162,255,.15); color:var(--text); font-weight:600; cursor:pointer;
+  background:rgba(122,162,255,.15); color:var(--text); font-weight:700; cursor:pointer;
 }
 button:hover{background:rgba(122,162,255,.25)}
+
 .stats{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
 .stat{
-  flex:1 1 180px; border:1px solid var(--border); border-radius:14px; padding:10px; background:rgba(255,255,255,.04);
+  flex:1 1 180px;
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:10px;
+  background:rgba(255,255,255,.04);
 }
 .stat .k{color:var(--muted);font-size:12px}
 .stat .v{font-family:var(--mono)}
+
 .qbox{margin-top:16px}
 .qtop{display:flex;justify-content:space-between;color:var(--muted);font-size:12px;gap:10px;flex-wrap:wrap}
 .qtext{font-size:16px;margin-top:10px}
+
 .choices{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
 @media(max-width:760px){.choices{grid-template-columns:1fr}}
+
 .choice{
-  border:1px solid var(--border); border-radius:14px; padding:12px; background:rgba(0,0,0,.25); cursor:pointer; text-align:left;
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:12px;
+  background:rgba(0,0,0,.25);
+  cursor:pointer;
+  text-align:left;
 }
 .choice:hover{border-color:var(--accent)}
 .choice .tag{font-family:var(--mono);font-size:12px;color:var(--muted);margin-bottom:6px}
+
 .modal{
-  position:fixed; inset:0; background:rgba(0,0,0,.6); display:flex; align-items:center; justify-content:center; padding:18px;
+  position:fixed; inset:0; background:rgba(0,0,0,.6);
+  display:flex; align-items:center; justify-content:center; padding:18px;
 }
 .modal.hidden{display:none!important}
 .modalBox{
   background:#0b1220; border:1px solid var(--border); border-radius:18px; padding:18px; width:min(650px,100%);
 }
 .modalBox h3{margin-top:0}
+
 .ticket{
-  margin-top:18px; border:1px dashed rgba(255,255,255,.3); border-radius:14px; padding:14px;
-  font-family:var(--mono); font-size:12px; white-space:pre-wrap;
+  margin-top:18px;
+  border:1px dashed rgba(255,255,255,.3);
+  border-radius:14px;
+  padding:14px;
+  font-family:var(--mono);
+  font-size:12px;
+  white-space:pre-wrap;
 }
+
+.hidden{display:none!important}
 small{color:var(--muted)}
 </style>
 </head>
@@ -80,6 +121,7 @@ small{color:var(--muted)}
 </header>
 
 <main>
+  <!-- SETUP -->
   <div class="card" id="setup">
     <div class="grid2">
       <div>
@@ -91,8 +133,13 @@ small{color:var(--muted)}
         <button id="resetBtn">Reset</button>
       </div>
     </div>
+    <small>After starting, the stats will stay visible on the game screen.</small>
+  </div>
 
-    <div class="stats">
+  <!-- GAME (STATS LIVE HERE) -->
+  <div class="card qbox hidden" id="game">
+    <div class="stats" style="margin-top:0">
+      <div class="stat"><div class="k">Name</div><div class="v" id="nameOut">—</div></div>
       <div class="stat"><div class="k">Date</div><div class="v" id="dateS">—</div></div>
       <div class="stat"><div class="k">Start</div><div class="v" id="startT">—</div></div>
       <div class="stat"><div class="k">Finish</div><div class="v" id="finishT">—</div></div>
@@ -100,19 +147,16 @@ small{color:var(--muted)}
       <div class="stat"><div class="k">Accuracy (First-Try)</div><div class="v" id="acc">—</div></div>
       <div class="stat"><div class="k">Progress</div><div class="v" id="prog">—</div></div>
     </div>
-    <small>Screenshot must show: name, date, start/finish stamps, timer, progress, and 100% accuracy ticket.</small>
-  </div>
 
-  <div class="card qbox" id="game" style="display:none">
-    <div class="qtop">
+    <div class="qtop" style="margin-top:14px">
       <div id="qnum"></div>
       <div id="cs"></div>
     </div>
     <div class="qtext" id="qtext"></div>
     <div class="choices" id="choices"></div>
-  </div>
 
-  <div class="ticket" id="ticket" style="display:none"></div>
+    <div class="ticket hidden" id="ticket"></div>
+  </div>
 </main>
 </div>
 
@@ -202,7 +246,7 @@ const QUESTIONS = [
     "Only local government involvement",
     "No role for the judiciary",
     "That policy issues cannot involve conflict"
-  ], a:0, e:"The executive regulates, the judiciary reviews challenges, and the legislature can respond via hearings/laws."},
+  ], a:0, e:"Executive regulates, judiciary reviews challenges, and legislature can respond via hearings/laws."},
 
   {cs:"CS18", q:"Which scenario best illustrates CONFLICT among levels of government?", c:[
     "A city adopts rules that are blocked by a state law",
@@ -216,28 +260,21 @@ const QUESTIONS = [
     "A city refuses to follow any state regulations",
     "A court overturns a law with no further action",
     "A private group boycotts a store"
-  ], a:0, e:"Collaboration happens when different levels coordinate funding and implementation."},
+  ], a:0, e:"Collaboration happens when levels coordinate funding and implementation."},
 
   {cs:"CS19", q:"Which action best fits influencing policy at a CITY/LOCAL level?", c:[
     "Offer comments at a city council public meeting",
     "File a brief at the U.S. Supreme Court",
     "Testify before Congress about a federal bill",
     "Campaign for the governor’s re-election to change city zoning"
-  ], a:0, e:"Public meetings like city council are a direct local input method."},
+  ], a:0, e:"City council meetings are direct local input."},
 
   {cs:"CS19", q:"Which action would most effectively influence officials deciding whether to build a neighborhood park?", c:[
     "Attend the city council meeting and present the benefits of a park",
     "Send an email to your U.S. senators",
     "Participate in the governor’s re-election campaign",
     "File a brief in the Ohio Supreme Court"
-  ], a:0, e:"A local park decision is made locally—city council input is targeted and effective."},
-
-  {cs:"CS19", q:"Which action would be an effective way to influence a CITY decision?", c:[
-    "Offer comments at a city council public meeting",
-    "Testify before Congress about a federal law",
-    "File a brief at the Ohio Supreme Court about a city budget",
-    "Campaign for a federal senator to change city zoning"
-  ], a:0, e:"Matching your method to the correct level/branch is key—city council meetings target local decisions."},
+  ], a:0, e:"Park decisions are local—city council input is targeted."},
 
   {cs:"CS19", q:"Which method best matches influencing LEGISLATORS directly on a proposed bill?", c:[
     "Lobby members of a legislature",
@@ -265,70 +302,35 @@ const QUESTIONS = [
     "Hold a vote in Congress",
     "Issue a proclamation",
     "Collect signatures to place an issue on a ballot"
-  ], a:0, e:"Briefs provide legal arguments and information during judicial proceedings."},
+  ], a:0, e:"Briefs provide legal arguments during judicial proceedings."},
 
   {cs:"CS19", q:"Which method best fits building public pressure on officials through mass participation?", c:[
     "Hold public demonstrations",
     "Write an executive order",
     "Appoint ambassadors",
     "Create a tax abatement"
-  ], a:0, e:"Demonstrations are a public pressure strategy."},
+  ], a:0, e:"Demonstrations create public pressure."},
 
   {cs:"CS19", q:"Which method best fits organized communication to policymakers over time?", c:[
     "Conduct letter-writing campaigns",
     "Declare war",
     "Issue sentencing guidelines",
     "Negotiate a treaty"
-  ], a:0, e:"Letter-writing campaigns target officials with repeated constituent messages."},
-
-  {cs:"CS19", q:"A group wants a STATE law changed. Which approach is most targeted?", c:[
-    "Propose a law to state legislators and lobby for it",
-    "Attend a city council meeting about a local ordinance",
-    "File a brief in federal court without any state issue involved",
-    "Campaign only for a city mayor"
-  ], a:0, e:"For state law, engage the state legislature through proposing and lobbying."},
-
-  {cs:"CS19", q:"A business wants a COUNTY tax abatement expanded. Which approach is most effective?", c:[
-    "Offer comments during a county commission public meeting",
-    "Testify before Congress",
-    "File a brief in the U.S. Supreme Court",
-    "Campaign for the president"
-  ], a:0, e:"Tax abatements are often handled locally—target the county commission process."},
-
-  {cs:"CS19", q:"A student group wants changes to SCHOOL DISTRICT policy. Which is most effective?", c:[
-    "Speak at a local school board meeting during public comment",
-    "Lobby U.S. senators about district policy",
-    "File a brief in the Ohio Supreme Court immediately",
-    "Campaign for a candidate in another state"
-  ], a:0, e:"District policy is local—school board input is the correct level."},
-
-  {cs:"CS19", q:"Which statement best explains why choosing the correct level and branch matters?", c:[
-    "Input is effective only when directed to the officials who control that policy stage",
-    "Any official can change any policy at any time",
-    "Courts write all laws",
-    "Only elections influence policy"
-  ], a:0, e:"Policy moves through stages—citizens must target the level/branch with authority."},
-
-  {cs:"CS18", q:"A federal agency writes regulations and Congress holds hearings about their impact. This best shows:", c:[
-    "Public policy can involve executive implementation and legislative oversight/response",
-    "Only the judiciary matters in policy",
-    "Local government controls federal agencies",
-    "Public policy cannot include rules"
-  ], a:0, e:"Policy includes implementation (executive agencies) and legislative involvement (hearings/laws)."},
-
-  {cs:"CS18", q:"Which scenario best represents an INTERNATIONAL public policy issue?", c:[
-    "The Department of State advising the president on foreign policy",
-    "A county commission granting a tax abatement",
-    "A city council debating a park",
-    "A state agency issuing a driver’s license rule"
-  ], a:0, e:"Foreign policy advising is international and handled in federal executive."},
+  ], a:0, e:"Letter-writing campaigns target officials repeatedly."},
 
   {cs:"CS19", q:"A community group wants a FEDERAL law changed. Which action is most targeted?", c:[
     "Testify before Congress and lobby members of Congress",
     "Attend a city council meeting",
     "Ask the county commission to vote",
     "File a brief in a state trial court"
-  ], a:0, e:"Federal laws are made by Congress—testimony and lobbying are direct methods."}
+  ], a:0, e:"Federal laws are made by Congress—testimony and lobbying are direct."},
+
+  {cs:"CS18", q:"Which scenario best represents an INTERNATIONAL public policy issue?", c:[
+    "The Department of State advising the president on foreign policy",
+    "A county commission granting a tax abatement",
+    "A city council debating a park",
+    "A state agency issuing a driver’s license rule"
+  ], a:0, e:"Foreign policy advising is international and handled in federal executive."}
 ];
 
 /* ---------- state ---------- */
@@ -343,31 +345,37 @@ let state = {
   finishedAt:null
 };
 
-const nameI=document.getElementById("name");
-const startBtn=document.getElementById("startBtn");
-const resetBtn=document.getElementById("resetBtn");
-const game=document.getElementById("game");
-const setup=document.getElementById("setup");
-const qnum=document.getElementById("qnum");
-const cs=document.getElementById("cs");
-const qtext=document.getElementById("qtext");
-const choices=document.getElementById("choices");
-const timer=document.getElementById("timer");
-const acc=document.getElementById("acc");
-const prog=document.getElementById("prog");
-const dateS=document.getElementById("dateS");
-const startT=document.getElementById("startT");
-const finishT=document.getElementById("finishT");
-const modal=document.getElementById("modal");
-const exp=document.getElementById("exp");
-const closeM=document.getElementById("closeM");
-const ticket=document.getElementById("ticket");
+const elSetup = document.getElementById("setup");
+const elGame  = document.getElementById("game");
+
+const nameI   = document.getElementById("name");
+const nameOut = document.getElementById("nameOut");
+const startBtn= document.getElementById("startBtn");
+const resetBtn= document.getElementById("resetBtn");
+
+const qnum    = document.getElementById("qnum");
+const cs      = document.getElementById("cs");
+const qtext   = document.getElementById("qtext");
+const choices = document.getElementById("choices");
+
+const timerEl = document.getElementById("timer");
+const accEl   = document.getElementById("acc");
+const progEl  = document.getElementById("prog");
+
+const dateS   = document.getElementById("dateS");
+const startT  = document.getElementById("startT");
+const finishT = document.getElementById("finishT");
+
+const modal   = document.getElementById("modal");
+const exp     = document.getElementById("exp");
+const closeM  = document.getElementById("closeM");
+const ticket  = document.getElementById("ticket");
 
 function updateStats(){
   const total = QUESTIONS.length;
   const shown = Math.min(state.i + 1, total);
-  prog.textContent = `${shown}/${total}`;
-  acc.textContent = `${Math.round((state.firstTryCorrect/total)*100)}%`;
+  progEl.textContent = `${shown}/${total}`;
+  accEl.textContent = `${Math.round((state.firstTryCorrect/total)*100)}%`;
   qnum.textContent = `Question ${shown}/${total}`;
 }
 
@@ -378,19 +386,19 @@ function render(){
   cs.textContent = q.cs;
   qtext.textContent = q.q;
 
-  // shuffle choices each load, preserving correct index
   const opts = q.c.map((t,i)=>({t,i}));
   shuffle(opts);
   const correctPos = opts.findIndex(o=>o.i===q.a);
 
-  choices.innerHTML="";
+  choices.innerHTML = "";
   opts.forEach((o,pos)=>{
-    const btn=document.createElement("button");
-    btn.className="choice";
-    btn.type="button";
+    const btn = document.createElement("button");
+    btn.className = "choice";
+    btn.type = "button";
     btn.innerHTML = `<div class="tag">${String.fromCharCode(65+pos)}</div>${o.t}`;
-    btn.onclick=()=>{
-      if(pos===correctPos){
+
+    btn.onclick = ()=>{
+      if(pos === correctPos){
         if(!state.hadMiss) state.firstTryCorrect++;
         state.i++;
         if(state.i < QUESTIONS.length){
@@ -406,6 +414,7 @@ function render(){
       }
       updateStats();
     };
+
     choices.appendChild(btn);
   });
 
@@ -415,6 +424,8 @@ function render(){
 function start(){
   const nm = nameI.value.trim();
   if(!nm) return alert("Enter your name.");
+
+  // reset
   state.name = nm;
   state.i = 0;
   state.sec = 0;
@@ -423,24 +434,27 @@ function start(){
   state.startedAt = new Date();
   state.finishedAt = null;
 
+  // shuffle order each run
+  shuffle(QUESTIONS);
+
+  // stamps + outputs
+  nameOut.textContent = state.name;
   dateS.textContent = formatDate(state.startedAt);
   startT.textContent = formatTime(state.startedAt);
   finishT.textContent = "—";
+  timerEl.textContent = "00:00";
+  ticket.classList.add("hidden");
+  ticket.textContent = "";
 
-  timer.textContent = "00:00";
-  ticket.style.display="none";
-
-  setup.style.display="none";
-  game.style.display="block";
+  // swap screens
+  elSetup.classList.add("hidden");
+  elGame.classList.remove("hidden");
 
   if(state.timer) clearInterval(state.timer);
   state.timer = setInterval(()=>{
     state.sec++;
-    timer.textContent = timeFmt(state.sec);
+    timerEl.textContent = timeFmt(state.sec);
   },1000);
-
-  // shuffle question order each run
-  shuffle(QUESTIONS);
 
   render();
 }
@@ -455,21 +469,21 @@ function finish(){
     return;
   }
 
-  ticket.style.display="block";
+  ticket.classList.remove("hidden");
   ticket.textContent =
 `TOPIC 8 — SUBMIT TICKET
 Name: ${state.name}
 Date: ${formatDate(state.startedAt)}
 Start: ${formatTime(state.startedAt)}
 Finish: ${formatTime(state.finishedAt)}
-Time: ${timer.textContent}
+Time: ${timerEl.textContent}
 Accuracy: 100% (First-Try Mastery)
 Questions: ${QUESTIONS.length}/${QUESTIONS.length}`;
 }
 
-startBtn.onclick=start;
-resetBtn.onclick=()=>location.reload();
-closeM.onclick=()=>modal.classList.add("hidden");
+startBtn.onclick = start;
+resetBtn.onclick = ()=>location.reload();
+closeM.onclick = ()=>modal.classList.add("hidden");
 </script>
 </body>
 </html>
