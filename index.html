@@ -16,10 +16,7 @@
       --radius:18px;
 
       --good:#2bd576;
-      --bad:#ff5c7a;
-      --warn:#ffd166;
       --accent:#7aa2ff;
-      --card:#111a2f;
 
       --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     }
@@ -48,7 +45,6 @@
       overflow:hidden;
     }
 
-    /* header */
     .top{
       display:flex;
       gap:14px;
@@ -66,11 +62,7 @@
       text-transform:uppercase;
       margin-bottom:6px;
     }
-    h1{
-      margin:0;
-      font-size:22px;
-      letter-spacing:.2px;
-    }
+    h1{ margin:0; font-size:22px; letter-spacing:.2px; }
     .sub{
       margin-top:6px;
       color:var(--muted);
@@ -99,7 +91,6 @@
       white-space:nowrap;
     }
 
-    /* top actions row */
     .actions{
       padding:12px 18px;
       border-bottom:1px solid var(--line);
@@ -129,17 +120,13 @@
       border-color:rgba(122,162,255,.55);
       background:rgba(122,162,255,.08);
     }
-    .btn .arrow{
-      font-family:var(--mono);
-      opacity:.9;
-    }
+    .btn .arrow{ font-family:var(--mono); opacity:.9; }
     .actions .hint{
       color:var(--muted);
       font-size:12.5px;
       line-height:1.35;
     }
 
-    /* grid */
     .grid{
       padding:18px;
       display:grid;
@@ -157,8 +144,6 @@
       border-radius:var(--radius);
       padding:14px;
       transition:transform .06s ease, border-color .12s ease, background .12s ease;
-      position:relative;
-      overflow:hidden;
     }
     a.card:hover{
       transform:translateY(-1px);
@@ -173,11 +158,8 @@
       gap:10px;
       margin-bottom:10px;
     }
-    .title{
-      font-weight:900;
-      font-size:14.5px;
-      line-height:1.25;
-    }
+    .title{ font-weight:900; font-size:14.5px; line-height:1.25; }
+
     .status{
       font-size:11px;
       font-weight:800;
@@ -220,7 +202,6 @@
       line-height:1.45;
     }
 
-    /* footer note */
     .foot{
       padding:14px 18px 18px;
       border-top:1px solid var(--line);
@@ -230,18 +211,6 @@
       color:var(--muted);
       font-size:12.5px;
       line-height:1.5;
-    }
-
-    /* optional: disabled cards */
-    a.card[data-disabled="true"]{
-      opacity:.55;
-      cursor:not-allowed;
-      filter:saturate(.85);
-    }
-    a.card[data-disabled="true"]:hover{
-      transform:none;
-      border-color:var(--line);
-      background:rgba(255,255,255,.04);
     }
   </style>
 </head>
@@ -265,10 +234,9 @@
       </div>
     </header>
 
-    <!-- Back button row -->
     <div class="actions">
-      <!-- ✅ Change href to your actual “main hub” file/path -->
-      <a class="btn" href="../index.html">
+      <!-- this points back to THIS hub (your request) -->
+      <a class="btn" href="https://jdwebs15.github.io/gov-mastery-games/">
         <span class="arrow">←</span>
         Back to main hub
       </a>
@@ -279,136 +247,82 @@
 
     <section class="grid">
       <a class="card" href="topic-1-civic-involvement.html">
-        <div class="row">
-          <div class="title">Topic 1 — Civic Involvement</div>
-          <span class="status live">LIVE</span>
-        </div>
+        <div class="row"><div class="title">Topic 1 — Civic Involvement</div><span class="status live">LIVE</span></div>
         <div class="chips">
-          <span class="chip">CS 1–2</span>
-          <span class="chip">Role of the People</span>
-          <span class="chip">OST stems</span>
-          <span class="chip accent">Start/End timestamps</span>
-          <span class="chip">100% required</span>
+          <span class="chip">CS 1–2</span><span class="chip">Role of the People</span><span class="chip">OST stems</span>
+          <span class="chip accent">Start/End timestamps</span><span class="chip">100% required</span>
         </div>
         <p class="desc">Foundational civic involvement: roles, responsibilities, and how citizens engage in democratic life.</p>
       </a>
 
       <a class="card" href="topic-2-civic-participation-skills.html">
-        <div class="row">
-          <div class="title">Topic 2 — Civic Participation Skills</div>
-          <span class="status live">LIVE</span>
-        </div>
+        <div class="row"><div class="title">Topic 2 — Civic Participation Skills</div><span class="status live">LIVE</span></div>
         <div class="chips">
-          <span class="chip">Skills practice</span>
-          <span class="chip">Evidence-based reasoning</span>
-          <span class="chip">OST style</span>
-          <span class="chip accent">Start/End timestamps</span>
-          <span class="chip">100% required</span>
+          <span class="chip">Skills practice</span><span class="chip">Evidence-based reasoning</span><span class="chip">OST style</span>
+          <span class="chip accent">Start/End timestamps</span><span class="chip">100% required</span>
         </div>
         <p class="desc">Skill-based practice: researching issues, evaluating claims/evidence, and choosing effective civic actions.</p>
       </a>
 
       <a class="card" href="topic-3-basic-principles-constitution.html">
-        <div class="row">
-          <div class="title">Topic 3 — Basic Principles of the Constitution</div>
-          <span class="status live">LIVE</span>
-        </div>
+        <div class="row"><div class="title">Topic 3 — Basic Principles of the Constitution</div><span class="status live">LIVE</span></div>
         <div class="chips">
-          <span class="chip">Popular sovereignty</span>
-          <span class="chip">Limited government</span>
-          <span class="chip">Federalism</span>
-          <span class="chip accent">Start/End timestamps</span>
-          <span class="chip">100% required</span>
+          <span class="chip">Popular sovereignty</span><span class="chip">Limited government</span><span class="chip">Federalism</span>
+          <span class="chip accent">Start/End timestamps</span><span class="chip">100% required</span>
         </div>
         <p class="desc">Core constitutional principles + application to scenarios and government structures.</p>
       </a>
 
       <a class="card" href="topic-4-bill-of-rights-cs8.html">
-        <div class="row">
-          <div class="title">Topic 4 — Bill of Rights</div>
-          <span class="status live">LIVE</span>
-        </div>
+        <div class="row"><div class="title">Topic 4 — Bill of Rights</div><span class="status live">LIVE</span></div>
         <div class="chips">
-          <span class="chip">Civil liberties</span>
-          <span class="chip">Limits on government</span>
-          <span class="chip">SCOTUS links</span>
-          <span class="chip accent">Start/End timestamps</span>
-          <span class="chip">100% required</span>
+          <span class="chip">Civil liberties</span><span class="chip">Limits on government</span><span class="chip">SCOTUS links</span>
+          <span class="chip accent">Start/End timestamps</span><span class="chip">100% required</span>
         </div>
         <p class="desc">Identify protected rights, violations, and how courts interpret key amendments.</p>
       </a>
 
       <a class="card" href="topic-5-amendments-12-26.html">
-        <div class="row">
-          <div class="title">Topic 5 — Amendments 12–26</div>
-          <span class="status live">LIVE</span>
-        </div>
+        <div class="row"><div class="title">Topic 5 — Amendments 12–26</div><span class="status live">LIVE</span></div>
         <div class="chips">
-          <span class="chip">Voting rights</span>
-          <span class="chip">Expanded democracy</span>
-          <span class="chip">Federal power shifts</span>
-          <span class="chip accent">Start/End timestamps</span>
-          <span class="chip">100% required</span>
+          <span class="chip">Voting rights</span><span class="chip">Expanded democracy</span><span class="chip">Federal power shifts</span>
+          <span class="chip accent">Start/End timestamps</span><span class="chip">100% required</span>
         </div>
         <p class="desc">Key amendments beyond the Bill of Rights: impacts on elections, rights, and governance.</p>
       </a>
 
       <a class="card" href="topic-6-structure-functions-fed-gov.html">
-        <div class="row">
-          <div class="title">Topic 6 — Structure &amp; Functions (Federal)</div>
-          <span class="status live">LIVE</span>
-        </div>
+        <div class="row"><div class="title">Topic 6 — Structure &amp; Functions (Federal)</div><span class="status live">LIVE</span></div>
         <div class="chips">
-          <span class="chip">Branches</span>
-          <span class="chip">Checks &amp; balances</span>
-          <span class="chip">CS 12/13/15</span>
-          <span class="chip accent">Start/End timestamps</span>
-          <span class="chip">100% required</span>
+          <span class="chip">Branches</span><span class="chip">Checks &amp; balances</span><span class="chip">CS 12/13/15</span>
+          <span class="chip accent">Start/End timestamps</span><span class="chip">100% required</span>
         </div>
         <p class="desc">How the federal government is built and how power is shared/checked across institutions.</p>
       </a>
 
       <a class="card" href="topic-7-ohio-state-local-government.html">
-        <div class="row">
-          <div class="title">Topic 7 — Ohio State &amp; Local Government</div>
-          <span class="status live">LIVE</span>
-        </div>
+        <div class="row"><div class="title">Topic 7 — Ohio State &amp; Local Government</div><span class="status live">LIVE</span></div>
         <div class="chips">
-          <span class="chip">CS 16–17</span>
-          <span class="chip">Ohio Constitution</span>
-          <span class="chip">Citizen responsibilities</span>
-          <span class="chip accent">Start/End timestamps</span>
-          <span class="chip">100% required</span>
+          <span class="chip">CS 16–17</span><span class="chip">Ohio Constitution</span><span class="chip">Citizen responsibilities</span>
+          <span class="chip accent">Start/End timestamps</span><span class="chip">100% required</span>
         </div>
         <p class="desc">State/local structures, home rule, and the responsibilities of Ohioans in civic life.</p>
       </a>
 
       <a class="card" href="topic-8-public-policy-cs18-19.html">
-        <div class="row">
-          <div class="title">Topic 8 — Public Policy</div>
-          <span class="status live">LIVE</span>
-        </div>
+        <div class="row"><div class="title">Topic 8 — Public Policy</div><span class="status live">LIVE</span></div>
         <div class="chips">
-          <span class="chip">CS 18–19</span>
-          <span class="chip">Policy levels</span>
-          <span class="chip">Civic input methods</span>
-          <span class="chip accent">Start/End timestamps</span>
-          <span class="chip">100% required</span>
+          <span class="chip">CS 18–19</span><span class="chip">Policy levels</span><span class="chip">Civic input methods</span>
+          <span class="chip accent">Start/End timestamps</span><span class="chip">100% required</span>
         </div>
         <p class="desc">How policy is made across branches/levels + how individuals and groups influence outcomes.</p>
       </a>
 
       <a class="card" href="topic-9-government-and-the-economy-cs20-21.html">
-        <div class="row">
-          <div class="title">Topic 9 — Government &amp; the Economy</div>
-          <span class="status live">LIVE</span>
-        </div>
+        <div class="row"><div class="title">Topic 9 — Government &amp; the Economy</div><span class="status live">LIVE</span></div>
         <div class="chips">
-          <span class="chip">CS 20–21</span>
-          <span class="chip">Fiscal vs monetary</span>
-          <span class="chip">Regulation tradeoffs</span>
-          <span class="chip accent">Start/End timestamps</span>
-          <span class="chip">100% required</span>
+          <span class="chip">CS 20–21</span><span class="chip">Fiscal vs monetary</span><span class="chip">Regulation tradeoffs</span>
+          <span class="chip accent">Start/End timestamps</span><span class="chip">100% required</span>
         </div>
         <p class="desc">How government stabilizes the economy: taxes/spending, the Fed, and costs/benefits of regulation.</p>
       </a>
@@ -416,155 +330,9 @@
 
     <footer class="foot">
       <div class="note">
-        Tip: If a game ever “white screens,” your hardened-shell version should show an on-page error box
-        with the exact cause. If this hub link 404s, it’s a filename mismatch.
+        Tip: If a game ever “white screens,” your hardened-shell version should show an on-page error box with the exact cause.
       </div>
     </footer>
   </div>
-
-  <script>
-    // Disable "coming soon" cards safely (if you ever add data-disabled="true")
-    document.querySelectorAll('a[data-disabled="true"]').forEach(a=>{
-      a.addEventListener('click', (e)=> e.preventDefault());
-    });
-  </script>
 </body>
 </html>
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Gov Mastery Games — Menu</title>
-<style>
-  :root{
-    --bg:#0b1220; --text:#e7eefc; --muted:#a8b4cf;
-    --border:rgba(255,255,255,.12);
-    --accent:#7aa2ff; --shadow:0 18px 55px rgba(0,0,0,.35);
-    --radius:18px;
-  }
-  *{box-sizing:border-box}
-  body{
-    margin:0;
-    font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
-    background:radial-gradient(900px 500px at 20% 20%,rgba(122,162,255,.18),transparent 60%),var(--bg);
-    color:var(--text);
-    min-height:100vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:18px;
-  }
-  .app{
-    width:min(980px,100%);
-    background:rgba(0,0,0,.25);
-    border:1px solid var(--border);
-    box-shadow:var(--shadow);
-    border-radius:22px;
-    overflow:hidden;
-  }
-  header{
-    padding:18px;
-    border-bottom:1px solid var(--border);
-    background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));
-  }
-  h1{margin:0;font-size:20px}
-  .sub{margin-top:6px;color:var(--muted);font-size:13px;line-height:1.35}
-  main{padding:18px}
-  .grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:12px;
-  }
-  @media (max-width:760px){ .grid{grid-template-columns:1fr;} }
-  a.card{
-    display:block;
-    text-decoration:none;
-    color:var(--text);
-    border:1px solid var(--border);
-    background:rgba(255,255,255,.04);
-    border-radius:var(--radius);
-    padding:14px;
-    transition:transform .05s ease, border-color .12s ease;
-  }
-  a.card:hover{ transform:translateY(-1px); border-color:rgba(122,162,255,.55); }
-  .title{font-weight:800;margin:0 0 6px 0}
-  .desc{margin:0;color:var(--muted);font-size:12.5px;line-height:1.35}
-  .note{
-    margin-top:14px;
-    color:var(--muted);
-    font-size:12.5px;
-    border-top:1px solid var(--border);
-    padding-top:14px;
-    line-height:1.45;
-  }
-  code{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Courier New",monospace}
-</style>
-</head>
-<body>
-  <div class="app">
-    <header>
-      <h1>Gov Mastery Games</h1>
-      <div class="sub">
-        Click your assigned topic game below.<br>
-        Reminder: Each game requires <b>100% first-try accuracy</b> to earn a submit ticket.
-      </div>
-    </header>
-
-    <main>
-      <div class="grid">
-        <a class="card" href="topic-1-civic-involvement.html">
-          <div class="title">Topic 1 — Civic Involvement</div>
-          <p class="desc">CS1–2 (+ Role of the People folded in). Mastery ticket required.</p>
-        </a>
-
-        <a class="card" href="topic-2-civic-participation-skills.html">
-          <div class="title">Topic 2 — Civic Participation Skills</div>
-          <p class="desc">Skill-based practice + mastery ticket.</p>
-        </a>
-
-        <a class="card" href="topic-3-basic-principles-constitution.html">
-          <div class="title">Topic 3 — Basic Principles of the Constitution</div>
-          <p class="desc">Foundations + applications. Mastery ticket required.</p>
-        </a>
-
-        <a class="card" href="topic-4-bill-of-rights-cs8.html">
-          <div class="title">Topic 4 — Bill of Rights (CS8)</div>
-          <p class="desc">Civil liberties and limits on government. Mastery ticket required.</p>
-        </a>
-
-       <a class="card" href="topic-5-amendments-12-26.html">
-  <div class="title">Topic 5 — Amendments 12–26</div>
-  <p class="desc">Expansion of democracy, voting rights, and changes to federal power. Mastery ticket required.</p>
-</a>
-
-        <a class="card" href="topic-6-structure-functions-fed-gov.html">
-          <div class="title">Topic 6 — Structure & Functions of Federal Government</div>
-          <p class="desc">CS12, 13, 15. Checks & balances + civil rights extension. Mastery ticket required.</p>
-        </a>
-
-        <a class="card" href="topic-7-ohio-state-local-government.html">
-          <div class="title">Topic 7 — Ohio State & Local Government</div>
-          <p class="desc">CS16–17. Ohio Constitution + responsibilities of citizens. Mastery ticket required.</p>
-        </a>
-
-        <a class="card" href="topic-8-public-policy-cs18-19.html">
-          <div class="title">Topic 8 — Public Policy</div>
-          <p class="desc">CS18–19. Policy levels/branches + methods of civic input. Mastery ticket required.</p>
-        </a>
-
-        <a class="card" href="topic-9-government-and-the-economy-cs20-21.html">
-          <div class="title">Topic 9 — Government & the Economy</div>
-          <p class="desc">CS20–21. Fiscal vs monetary + regulation costs/benefits. Mastery ticket required.</p>
-        </a>
-      </div>
-
-      <div class="note">
-        If a link says “404 not found”, it means the filename in the link doesn’t match the repo exactly.
-        Fix by renaming the file or updating the link here so they match <b>character-for-character</b>.
-      </div>
-    </main>
-  </div>
-</body>
-</html>
-
