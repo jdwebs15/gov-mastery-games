@@ -1,489 +1,81 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Topic 8 — Public Policy (CS18–19)</title>
+const QUESTIONS=[
 
-<style>
-:root{
-  --bg:#0b1220; --text:#e7eefc; --muted:#a8b4cf; --border:rgba(255,255,255,.12);
-  --accent:#7aa2ff; --good:#2bd576; --bad:#ff5c7a; --shadow:0 18px 55px rgba(0,0,0,.35);
-  --radius:18px; --radius2:14px; --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Courier New";
-  --sans: system-ui, -apple-system, Segoe UI, Roboto, Arial;
-}
-*{box-sizing:border-box}
-body{
-  margin:0;
-  background:radial-gradient(900px 500px at 20% 20%,rgba(122,162,255,.18),transparent 60%),var(--bg);
-  color:var(--text);
-  font-family:var(--sans);
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:18px;
-}
-.app{
-  width:min(980px,100%);
-  background:rgba(0,0,0,.25);
-  border:1px solid var(--border);
-  border-radius:22px;
-  box-shadow:var(--shadow);
-  overflow:hidden;
-}
-header{padding:18px;border-bottom:1px solid var(--border)}
-h1{margin:0;font-size:18px}
-.sub{color:var(--muted);font-size:13px;margin-top:6px}
-main{padding:18px}
+// ======================
+// FOUNDATIONS & SIMILARITIES
+// ======================
 
-.card{
-  background:rgba(255,255,255,.04);
-  border:1px solid var(--border);
-  border-radius:var(--radius);
-  padding:16px;
-}
+{cs:"CS16",q:"Which principle is found in BOTH the Ohio and U.S. Constitutions?",c:["Separation of powers","Initiative","Elected judges","Term limits for Congress"],a:0,e:"Both constitutions divide power among three branches to prevent abuse of authority."},
 
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-@media(max-width:760px){.grid2{grid-template-columns:1fr}}
+{cs:"CS16",q:"Both constitutions include a:",c:["Bill of Rights","Parliament","National church","Monarchy"],a:0,e:"Both contain a Bill of Rights protecting individual liberties."},
 
-label{font-size:13px;color:var(--muted)}
-input{
-  width:100%; padding:12px; border-radius:12px; border:1px solid var(--border);
-  background:rgba(0,0,0,.3); color:var(--text);
-}
+{cs:"CS16",q:"Which principle reflects popular sovereignty in BOTH constitutions?",c:["People elect representatives","Courts appoint leaders","Military chooses leaders","Governor rules without election"],a:0,e:"Power originates with the people through elections."},
 
-button{
-  padding:12px 14px; border-radius:14px; border:1px solid var(--border);
-  background:rgba(122,162,255,.15); color:var(--text); font-weight:700; cursor:pointer;
-}
-button:hover{background:rgba(122,162,255,.25)}
+{cs:"CS16",q:"Federalism in Ohio means:",c:["Power is shared between state and national governments","Cities control the U.S. government","Ohio overrides federal law","The governor controls Congress"],a:0,e:"Federalism divides power between state and national governments."},
 
-.stats{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
-.stat{
-  flex:1 1 180px;
-  border:1px solid var(--border);
-  border-radius:14px;
-  padding:10px;
-  background:rgba(255,255,255,.04);
-}
-.stat .k{color:var(--muted);font-size:12px}
-.stat .v{font-family:var(--mono)}
+// ======================
+// 1803 CONSTITUTION
+// ======================
 
-.qbox{margin-top:16px}
-.qtop{display:flex;justify-content:space-between;color:var(--muted);font-size:12px;gap:10px;flex-wrap:wrap}
-.qtext{font-size:16px;margin-top:10px}
+{cs:"CS16",q:"Under the 1803 Constitution, how were judges selected?",c:["Appointed by legislature","Elected by voters","Appointed by governor alone","Chosen by citizens in referendum"],a:0,e:"In 1803, judges were appointed by the General Assembly, not elected by voters."},
 
-.choices{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
-@media(max-width:760px){.choices{grid-template-columns:1fr}}
+{cs:"CS16",q:"Under the 1803 Constitution, who held the most power?",c:["The legislature","The governor","The courts","Local governments"],a:0,e:"The General Assembly dominated state government under the 1803 Constitution."},
 
-.choice{
-  border:1px solid var(--border);
-  border-radius:14px;
-  padding:12px;
-  background:rgba(0,0,0,.25);
-  cursor:pointer;
-  text-align:left;
-}
-.choice:hover{border-color:var(--accent)}
-.choice .tag{font-family:var(--mono);font-size:12px;color:var(--muted);margin-bottom:6px}
+{cs:"CS16",q:"One weakness of the 1803 Constitution was that it:",c:["Gave too much power to the legislature","Allowed too much citizen control","Eliminated checks and balances","Prevented amendments"],a:0,e:"The legislature had excessive control over courts and executive offices."},
 
-.modal{
-  position:fixed; inset:0; background:rgba(0,0,0,.6);
-  display:flex; align-items:center; justify-content:center; padding:18px;
-}
-.modal.hidden{display:none!important}
-.modalBox{
-  background:#0b1220; border:1px solid var(--border); border-radius:18px; padding:18px; width:min(650px,100%);
-}
-.modalBox h3{margin-top:0}
+{cs:"CS16",q:"Why was the governor weaker under the 1803 Constitution?",c:["Limited veto power and short term","Too much military control","Appointed all officials","Controlled taxation"],a:0,e:"The governor had limited authority and short terms under 1803."},
 
-.ticket{
-  margin-top:18px;
-  border:1px dashed rgba(255,255,255,.3);
-  border-radius:14px;
-  padding:14px;
-  font-family:var(--mono);
-  font-size:12px;
-  white-space:pre-wrap;
-}
+// ======================
+// REASONS FOR CHANGE (1851)
+// ======================
 
-.hidden{display:none!important}
-small{color:var(--muted)}
-</style>
-</head>
+{cs:"CS16",q:"Why did Ohio call a constitutional convention in 1850?",c:["Government was inefficient and overly legislative-dominated","To eliminate elections","To remove the Bill of Rights","To increase federal control"],a:0,e:"Citizens believed the legislature held too much power and reforms were needed."},
 
-<body>
-<div class="app">
-<header>
-  <h1>Topic 8 — Public Policy (CS18–19)</h1>
-  <div class="sub">100% first-try accuracy required • Wrong answers trigger an explanation until corrected • Auto-advance on correct</div>
-</header>
+{cs:"CS16",q:"Public frustration before 1851 focused primarily on:",c:["Legislative corruption and debt","Too many elections","Excess executive authority","Judicial independence"],a:0,e:"Concerns centered on legislative control and state financial problems."},
 
-<main>
-  <!-- SETUP -->
-  <div class="card" id="setup">
-    <div class="grid2">
-      <div>
-        <label>Student Name</label>
-        <input id="name" placeholder="Type first + last name" autocomplete="off"/>
-      </div>
-      <div style="display:flex;gap:10px;align-items:end;flex-wrap:wrap">
-        <button id="startBtn">Start Game</button>
-        <button id="resetBtn">Reset</button>
-      </div>
-    </div>
-    <small>After starting, the stats will stay visible on the game screen.</small>
-  </div>
+{cs:"CS16",q:"Ohio’s rising state debt in the 1840s contributed to:",c:["Demand for financial reform in the 1851 Constitution","Abolishing taxation","Removing courts","Federal takeover"],a:0,e:"Financial mismanagement pushed reformers to limit legislative spending."},
 
-  <!-- GAME (STATS LIVE HERE) -->
-  <div class="card qbox hidden" id="game">
-    <div class="stats" style="margin-top:0">
-      <div class="stat"><div class="k">Name</div><div class="v" id="nameOut">—</div></div>
-      <div class="stat"><div class="k">Date</div><div class="v" id="dateS">—</div></div>
-      <div class="stat"><div class="k">Start</div><div class="v" id="startT">—</div></div>
-      <div class="stat"><div class="k">Finish</div><div class="v" id="finishT">—</div></div>
-      <div class="stat"><div class="k">Timer</div><div class="v" id="timer">00:00</div></div>
-      <div class="stat"><div class="k">Accuracy (First-Try)</div><div class="v" id="acc">—</div></div>
-      <div class="stat"><div class="k">Progress</div><div class="v" id="prog">—</div></div>
-    </div>
+// ======================
+// SOLUTIONS IN 1851
+// ======================
 
-    <div class="qtop" style="margin-top:14px">
-      <div id="qnum"></div>
-      <div id="cs"></div>
-    </div>
-    <div class="qtext" id="qtext"></div>
-    <div class="choices" id="choices"></div>
+{cs:"CS16",q:"How did the 1851 Constitution change judicial selection?",c:["Judges became elected by voters","Judges remained appointed","Judges were federally appointed","Judges were chosen by governor alone"],a:0,e:"The 1851 Constitution required judges to be elected."},
 
-    <div class="ticket hidden" id="ticket"></div>
-  </div>
-</main>
-</div>
+{cs:"CS16",q:"The 1851 Constitution limited state debt by:",c:["Restricting borrowing without voter approval","Eliminating taxation","Giving full control to governor","Removing legislature"],a:0,e:"Debt restrictions were added to prevent financial abuse."},
 
-<div class="modal hidden" id="modal">
-  <div class="modalBox">
-    <h3>Not Correct — Explanation</h3>
-    <p id="exp"></p>
-    <button id="closeM">Try Again</button>
-  </div>
-</div>
+{cs:"CS16",q:"Which reform reduced legislative dominance in 1851?",c:["Separating election of executive officials","Giving legislature more judges","Eliminating courts","Ending elections"],a:0,e:"Voters began electing executive officials independently of the legislature."},
 
-<script>
-/* ---------- helpers ---------- */
-function pad(n){return String(n).padStart(2,"0")}
-function timeFmt(s){return pad(Math.floor(s/60))+":"+pad(s%60)}
-function formatDate(d){ return d.toLocaleDateString(undefined,{year:"numeric",month:"short",day:"numeric"}); }
-function formatTime(d){ return d.toLocaleTimeString(undefined,{hour:"numeric",minute:"2-digit",second:"2-digit"}); }
-function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}}
+{cs:"CS16",q:"The initiative and referendum process introduced in Ohio allows citizens to:",c:["Propose or repeal laws directly","Appoint judges","Override U.S. Supreme Court","Select governor without election"],a:0,e:"Initiative and referendum expanded direct democracy."},
 
-/* ---------- QUESTIONS (28) ---------- */
-const QUESTIONS = [
-  {cs:"CS18", q:"Which statement best defines a public policy issue?", c:[
-    "A matter of discussion and debate about government functions and consequences of decisions",
-    "A personal decision that affects only one individual",
-    "A court case that can never involve the other branches",
-    "A law that applies only to private businesses"
-  ], a:0, e:"Public policy issues involve government action, debate, and projected consequences of decisions."},
+// ======================
+// COMPARISONS
+// ======================
 
-  {cs:"CS18", q:"Which example is a FEDERAL EXECUTIVE entity addressing public policy in foreign affairs?", c:[
-    "U.S. Department of State advising the president and directing embassy activities",
-    "Congressional Budget Office writing a budget bill",
-    "Ohio Legislative Service Commission voting on bills",
-    "Ohio Courts of Common Pleas passing a local ordinance"
-  ], a:0, e:"The Department of State is in the federal executive branch and supports foreign policy."},
+{cs:"CS16",q:"Which statement best compares the 1803 and 1851 Constitutions?",c:["1851 increased voter control and limited legislative power","1851 strengthened legislative dominance","1803 allowed direct democracy","Both eliminated elections"],a:0,e:"The 1851 Constitution expanded citizen influence and limited legislature."},
 
-  {cs:"CS18", q:"Which example is a FEDERAL LEGISLATIVE entity addressing public policy through analysis?", c:[
-    "Congressional Budget Office providing economic and budget analysis",
-    "Department of State negotiating a cease-fire",
-    "Ohio Courts of Common Pleas applying sentencing guidelines",
-    "County commission granting tax abatements"
-  ], a:0, e:"The CBO supports Congress by analyzing economic and budget data."},
+{cs:"CS16",q:"Unlike 1803, the 1851 Constitution:",c:["Required more officials to be elected","Eliminated courts","Removed separation of powers","Ended the governor’s role"],a:0,e:"More officials became directly accountable to voters."},
 
-  {cs:"CS18", q:"Which example best matches a STATE LEGISLATIVE entity helping create policy?", c:[
-    "Ohio Legislative Service Commission assisting in drafting legislation",
-    "U.S. Supreme Court reviewing constitutionality",
-    "City council enforcing a law",
-    "Federal agency issuing a pardon"
-  ], a:0, e:"The Ohio Legislative Service Commission supports the state legislature by drafting legislation."},
+{cs:"CS16",q:"Both the 1803 and 1851 Constitutions:",c:["Established three branches of government","Allowed monarchy","Eliminated elections","Gave federal courts control"],a:0,e:"Both created legislative, executive, and judicial branches."},
 
-  {cs:"CS18", q:"Which is a STATE JUDICIAL example of public policy being applied?", c:[
-    "Ohio Courts of Common Pleas applying sentencing guidelines to convicted felons",
-    "Governor signing a treaty",
-    "City council negotiating an international trade agreement",
-    "Congress appointing federal judges"
-  ], a:0, e:"Courts apply laws/policies through sentencing and judicial decisions."},
+{cs:"CS16",q:"Which reform shows increased democratic participation in 1851?",c:["Electing judges","Appointing judges","Extending legislative terms","Eliminating referendums"],a:0,e:"Judicial elections increased direct voter control."},
 
-  {cs:"CS18", q:"Which is a LOCAL legislative/executive example of public policy action?", c:[
-    "County commission determining and granting tax abatements",
-    "U.S. Senate approving a treaty",
-    "CBO issuing an executive order",
-    "Ohio Supreme Court drafting a bill"
-  ], a:0, e:"County commissions can make local decisions like tax abatements."},
+// ======================
+// CIVIC RESPONSIBILITIES (CS17)
+// ======================
 
-  {cs:"CS18", q:"Why can public policy become complex?", c:[
-    "It may involve multiple levels and branches that collaborate or conflict",
-    "Only one branch is ever involved",
-    "It is always decided by direct democracy",
-    "It is limited to international issues only"
-  ], a:0, e:"Many policy issues require multiple levels/branches and can involve collaboration or conflict."},
+{cs:"CS17",q:"Which action best demonstrates civic responsibility?",c:["Voting in elections","Ignoring laws","Avoiding jury duty","Not paying taxes"],a:0,e:"Voting helps citizens participate in democracy."},
 
-  {cs:"CS18", q:"Which example shows public policy created through collaboration among branches?", c:[
-    "Senate approves a treaty negotiated by the president",
-    "A governor threatens to veto a bill",
-    "A court ruling is appealed",
-    "An agency writes a report only for internal use"
-  ], a:0, e:"Treaties are negotiated by the executive and approved by the Senate—two branches working together."},
+{cs:"CS17",q:"Serving on a jury supports government by:",c:["Ensuring fair trials","Electing judges","Writing laws","Approving budgets"],a:0,e:"Juries are essential to administering justice."},
 
-  {cs:"CS18", q:"A city wants a new park. The city council holds a public hearing and then votes to fund it. This is best described as:", c:[
-    "Local government addressing a domestic public policy issue",
-    "The federal judicial branch creating foreign policy",
-    "State courts negotiating a treaty",
-    "A private company making a personal choice"
-  ], a:0, e:"Local legislative/executive bodies handle community issues like parks through policy decisions."},
+{cs:"CS17",q:"Attending city council meetings allows citizens to:",c:["Influence local policy","Declare war","Print money","Override courts"],a:0,e:"Public meetings provide input opportunities."},
 
-  {cs:"CS18", q:"A new federal environmental rule is challenged in court, then Congress holds hearings about it. This example best shows:", c:[
-    "Different branches interacting around the same policy issue",
-    "Only local government involvement",
-    "No role for the judiciary",
-    "That policy issues cannot involve conflict"
-  ], a:0, e:"Executive regulates, judiciary reviews challenges, and legislature can respond via hearings/laws."},
+{cs:"CS17",q:"Paying taxes is important because taxes:",c:["Fund public services","Choose leaders","Create amendments","Appoint officials"],a:0,e:"Taxes support essential services."},
 
-  {cs:"CS18", q:"Which scenario best illustrates CONFLICT among levels of government?", c:[
-    "A city adopts rules that are blocked by a state law",
-    "A governor signs a state law and agencies carry it out",
-    "Congress requests budget analysis from the CBO",
-    "A county commission votes to grant a tax abatement"
-  ], a:0, e:"Conflict can occur when local and state policies clash (preemption)."},
+{cs:"CS17",q:"Contacting elected officials is significant because it:",c:["Communicates public concerns","Cancels elections","Removes courts","Overrides the Constitution"],a:0,e:"Communication influences policy decisions."},
 
-  {cs:"CS18", q:"Which scenario best illustrates COLLABORATION among levels of government?", c:[
-    "Federal grants fund a state highway project administered by the state transportation agency",
-    "A city refuses to follow any state regulations",
-    "A court overturns a law with no further action",
-    "A private group boycotts a store"
-  ], a:0, e:"Collaboration happens when levels coordinate funding and implementation."},
+{cs:"CS17",q:"Volunteering in the community demonstrates:",c:["Active civic participation","Judicial review","Federal supremacy","Nullification"],a:0,e:"Volunteering supports community and democratic values."},
 
-  {cs:"CS19", q:"Which action best fits influencing policy at a CITY/LOCAL level?", c:[
-    "Offer comments at a city council public meeting",
-    "File a brief at the U.S. Supreme Court",
-    "Testify before Congress about a federal bill",
-    "Campaign for the governor’s re-election to change city zoning"
-  ], a:0, e:"City council meetings are direct local input."},
+{cs:"CS17",q:"Which responsibility directly strengthens democracy?",c:["Registering to vote","Avoiding taxes","Skipping jury duty","Ignoring public meetings"],a:0,e:"Participation strengthens representative government."},
 
-  {cs:"CS19", q:"Which action would most effectively influence officials deciding whether to build a neighborhood park?", c:[
-    "Attend the city council meeting and present the benefits of a park",
-    "Send an email to your U.S. senators",
-    "Participate in the governor’s re-election campaign",
-    "File a brief in the Ohio Supreme Court"
-  ], a:0, e:"Park decisions are local—city council input is targeted."},
+{cs:"CS17",q:"Local governments are important because they:",c:["Handle community needs","Declare war","Print national currency","Negotiate treaties"],a:0,e:"Local governments manage schools, roads, and safety."}
 
-  {cs:"CS19", q:"Which method best matches influencing LEGISLATORS directly on a proposed bill?", c:[
-    "Lobby members of a legislature",
-    "Issue an executive order",
-    "Grant a pardon",
-    "Declare a law unconstitutional"
-  ], a:0, e:"Lobbying targets legislators who vote on bills."},
-
-  {cs:"CS19", q:"Which method best matches influencing policy during committee review of a bill?", c:[
-    "Provide testimony before legislative committees",
-    "Negotiate a treaty with a foreign nation",
-    "Write a court ruling",
-    "Create a new county commission"
-  ], a:0, e:"Committees hear testimony as part of the legislative process."},
-
-  {cs:"CS19", q:"Which method best fits trying to shape how an EXECUTIVE AGENCY writes rules/regulations?", c:[
-    "Provide information to executive branch officials about impacts of potential rules",
-    "Impeach a judge",
-    "Override a veto",
-    "File a criminal indictment"
-  ], a:0, e:"Agencies consider impact information when drafting regulations."},
-
-  {cs:"CS19", q:"Which method best fits influencing the JUDICIAL branch during a court case?", c:[
-    "Prepare briefs to present during judicial proceedings",
-    "Hold a vote in Congress",
-    "Issue a proclamation",
-    "Collect signatures to place an issue on a ballot"
-  ], a:0, e:"Briefs provide legal arguments during judicial proceedings."},
-
-  {cs:"CS19", q:"Which method best fits building public pressure on officials through mass participation?", c:[
-    "Hold public demonstrations",
-    "Write an executive order",
-    "Appoint ambassadors",
-    "Create a tax abatement"
-  ], a:0, e:"Demonstrations create public pressure."},
-
-  {cs:"CS19", q:"Which method best fits organized communication to policymakers over time?", c:[
-    "Conduct letter-writing campaigns",
-    "Declare war",
-    "Issue sentencing guidelines",
-    "Negotiate a treaty"
-  ], a:0, e:"Letter-writing campaigns target officials repeatedly."},
-
-  {cs:"CS19", q:"A community group wants a FEDERAL law changed. Which action is most targeted?", c:[
-    "Testify before Congress and lobby members of Congress",
-    "Attend a city council meeting",
-    "Ask the county commission to vote",
-    "File a brief in a state trial court"
-  ], a:0, e:"Federal laws are made by Congress—testimony and lobbying are direct."},
-
-  {cs:"CS18", q:"Which scenario best represents an INTERNATIONAL public policy issue?", c:[
-    "The Department of State advising the president on foreign policy",
-    "A county commission granting a tax abatement",
-    "A city council debating a park",
-    "A state agency issuing a driver’s license rule"
-  ], a:0, e:"Foreign policy advising is international and handled in federal executive."}
 ];
-
-/* ---------- state ---------- */
-let state = {
-  i:0,
-  sec:0,
-  timer:null,
-  name:"",
-  firstTryCorrect:0,
-  hadMiss:false,
-  startedAt:null,
-  finishedAt:null
-};
-
-const elSetup = document.getElementById("setup");
-const elGame  = document.getElementById("game");
-
-const nameI   = document.getElementById("name");
-const nameOut = document.getElementById("nameOut");
-const startBtn= document.getElementById("startBtn");
-const resetBtn= document.getElementById("resetBtn");
-
-const qnum    = document.getElementById("qnum");
-const cs      = document.getElementById("cs");
-const qtext   = document.getElementById("qtext");
-const choices = document.getElementById("choices");
-
-const timerEl = document.getElementById("timer");
-const accEl   = document.getElementById("acc");
-const progEl  = document.getElementById("prog");
-
-const dateS   = document.getElementById("dateS");
-const startT  = document.getElementById("startT");
-const finishT = document.getElementById("finishT");
-
-const modal   = document.getElementById("modal");
-const exp     = document.getElementById("exp");
-const closeM  = document.getElementById("closeM");
-const ticket  = document.getElementById("ticket");
-
-function updateStats(){
-  const total = QUESTIONS.length;
-  const shown = Math.min(state.i + 1, total);
-  progEl.textContent = `${shown}/${total}`;
-  accEl.textContent = `${Math.round((state.firstTryCorrect/total)*100)}%`;
-  qnum.textContent = `Question ${shown}/${total}`;
-}
-
-function render(){
-  const q = QUESTIONS[state.i];
-  state.hadMiss = false;
-
-  cs.textContent = q.cs;
-  qtext.textContent = q.q;
-
-  const opts = q.c.map((t,i)=>({t,i}));
-  shuffle(opts);
-  const correctPos = opts.findIndex(o=>o.i===q.a);
-
-  choices.innerHTML = "";
-  opts.forEach((o,pos)=>{
-    const btn = document.createElement("button");
-    btn.className = "choice";
-    btn.type = "button";
-    btn.innerHTML = `<div class="tag">${String.fromCharCode(65+pos)}</div>${o.t}`;
-
-    btn.onclick = ()=>{
-      if(pos === correctPos){
-        if(!state.hadMiss) state.firstTryCorrect++;
-        state.i++;
-        if(state.i < QUESTIONS.length){
-          updateStats();
-          render();
-        }else{
-          finish();
-        }
-      }else{
-        state.hadMiss = true;
-        exp.textContent = q.e;
-        modal.classList.remove("hidden");
-      }
-      updateStats();
-    };
-
-    choices.appendChild(btn);
-  });
-
-  updateStats();
-}
-
-function start(){
-  const nm = nameI.value.trim();
-  if(!nm) return alert("Enter your name.");
-
-  // reset
-  state.name = nm;
-  state.i = 0;
-  state.sec = 0;
-  state.firstTryCorrect = 0;
-  state.hadMiss = false;
-  state.startedAt = new Date();
-  state.finishedAt = null;
-
-  // shuffle order each run
-  shuffle(QUESTIONS);
-
-  // stamps + outputs
-  nameOut.textContent = state.name;
-  dateS.textContent = formatDate(state.startedAt);
-  startT.textContent = formatTime(state.startedAt);
-  finishT.textContent = "—";
-  timerEl.textContent = "00:00";
-  ticket.classList.add("hidden");
-  ticket.textContent = "";
-
-  // swap screens
-  elSetup.classList.add("hidden");
-  elGame.classList.remove("hidden");
-
-  if(state.timer) clearInterval(state.timer);
-  state.timer = setInterval(()=>{
-    state.sec++;
-    timerEl.textContent = timeFmt(state.sec);
-  },1000);
-
-  render();
-}
-
-function finish(){
-  clearInterval(state.timer);
-  state.finishedAt = new Date();
-  finishT.textContent = formatTime(state.finishedAt);
-
-  if(state.firstTryCorrect !== QUESTIONS.length){
-    alert("You finished, but mastery requires 100% FIRST-TRY accuracy. Hit Reset and try again.");
-    return;
-  }
-
-  ticket.classList.remove("hidden");
-  ticket.textContent =
-`TOPIC 8 — SUBMIT TICKET
-Name: ${state.name}
-Date: ${formatDate(state.startedAt)}
-Start: ${formatTime(state.startedAt)}
-Finish: ${formatTime(state.finishedAt)}
-Time: ${timerEl.textContent}
-Accuracy: 100% (First-Try Mastery)
-Questions: ${QUESTIONS.length}/${QUESTIONS.length}`;
-}
-
-startBtn.onclick = start;
-resetBtn.onclick = ()=>location.reload();
-closeM.onclick = ()=>modal.classList.add("hidden");
-</script>
-</body>
-</html>
