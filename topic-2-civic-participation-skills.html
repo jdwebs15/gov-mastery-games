@@ -44,12 +44,7 @@ body{
 }
 .hidden{display:none !important;}
 
-.panel{
-  background:rgba(0,0,0,.25);
-  padding:14px;
-  border-radius:14px;
-  border:1px solid rgba(255,255,255,.08);
-}
+.panel{background:rgba(0,0,0,.25);padding:14px;border-radius:14px;border:1px solid rgba(255,255,255,.08)}
 h2{margin:10px 0 8px 0}
 p{color:var(--muted);margin:0 0 10px 0}
 
@@ -161,6 +156,9 @@ button:hover{opacity:.92}
     <div class="panel">
       <div class="stats">
         <div>Name: <span id="nameOut"></span></div>
+        <div>Date: <span id="dateOut">—</span></div>
+        <div>Start: <span id="startOut">—</span></div>
+        <div>End: <span id="endOut">—</span></div>
         <div>Timer: <span id="timerOut">0:00</span></div>
         <div>Question: <span id="qOut">0/0</span></div>
         <div>Attempts: <span id="attemptsOut">0</span></div>
@@ -180,6 +178,9 @@ button:hover{opacity:.92}
   <div id="endScreen" class="hidden panel">
     <h2>SUBMIT TICKET</h2>
     <p>Name: <span id="endName"></span></p>
+    <p>Date: <span id="endDate"></span></p>
+    <p>Start Time: <span id="endStart"></span></p>
+    <p>End Time: <span id="endEnd"></span></p>
     <p>Total Time: <span id="totalTime"></span></p>
     <p>Accuracy: 100%</p>
     <p>Completed: <span id="doneOut">0/0</span></p>
@@ -204,10 +205,11 @@ function showError(where, err){
   const out = `ERROR (${where}):\n${msg}`;
   const b1 = document.getElementById("errorBoxStart");
   const b2 = document.getElementById("errorBoxGame");
-  if(b2 && !document.getElementById("gameScreen").classList.contains("hidden")){
+  const onGame = !document.getElementById("gameScreen").classList.contains("hidden");
+  if(onGame && b2){
     b2.style.display = "block";
     b2.textContent = out;
-  } else if(b1){
+  } else if (b1){
     b1.style.display = "block";
     b1.textContent = out;
   } else {
@@ -216,6 +218,19 @@ function showError(where, err){
 }
 window.addEventListener("error", (e)=> showError("window", e.error || e.message));
 window.addEventListener("unhandledrejection", (e)=> showError("promise", e.reason));
+
+/* ============================
+   TIME/DATE HELPERS
+============================ */
+function pad2(n){ return String(n).padStart(2,"0"); }
+function formatDate(d){
+  // e.g., Feb 18, 2026
+  return d.toLocaleDateString(undefined, { year:"numeric", month:"short", day:"numeric" });
+}
+function formatTime(d){
+  // e.g., 9:14:05 AM
+  return d.toLocaleTimeString(undefined, { hour:"numeric", minute:"2-digit", second:"2-digit" });
+}
 
 /* ============================
    HELPERS: SHUFFLE + KEEP ANSWER
@@ -354,6 +369,9 @@ let QUESTIONS = QUESTIONS_RAW
 let i=0, attempts=0, misses=0, seconds=0, timer=null;
 let locked=false;
 
+let startedAt = null;
+let endedAt = null;
+
 document.getElementById("startBtn").addEventListener("click", startGame);
 
 function startGame(){
@@ -363,12 +381,21 @@ function startGame(){
 
     // reset
     i=0; attempts=0; misses=0; seconds=0; locked=false;
+    startedAt = new Date();
+    endedAt = null;
+
     document.getElementById("attemptsOut").textContent="0";
     document.getElementById("missesOut").textContent="0";
     document.getElementById("timerOut").textContent="0:00";
     document.getElementById("qOut").textContent=`1/${QUESTIONS.length}`;
 
     document.getElementById("nameOut").textContent=name;
+
+    // date + start time on screen
+    document.getElementById("dateOut").textContent = formatDate(startedAt);
+    document.getElementById("startOut").textContent = formatTime(startedAt);
+    document.getElementById("endOut").textContent = "—";
+
     document.getElementById("startScreen").classList.add("hidden");
     document.getElementById("gameScreen").classList.remove("hidden");
 
@@ -452,7 +479,7 @@ function check(idx,btn){
 
 function closeModal(){
   document.getElementById("modal").classList.add("hidden");
-  locked=false; // allow another attempt on the same question
+  locked=false;
 }
 
 function finish(){
@@ -464,10 +491,20 @@ function finish(){
     return;
   }
 
+  endedAt = new Date();
+  document.getElementById("endOut").textContent = formatTime(endedAt);
+
   document.getElementById("gameScreen").classList.add("hidden");
   document.getElementById("endScreen").classList.remove("hidden");
-  document.getElementById("endName").textContent=document.getElementById("nameOut").textContent;
-  document.getElementById("totalTime").textContent=document.getElementById("timerOut").textContent;
+
+  const nm = document.getElementById("nameOut").textContent;
+  document.getElementById("endName").textContent = nm;
+
+  document.getElementById("endDate").textContent = formatDate(startedAt);
+  document.getElementById("endStart").textContent = formatTime(startedAt);
+  document.getElementById("endEnd").textContent = formatTime(endedAt);
+
+  document.getElementById("totalTime").textContent = document.getElementById("timerOut").textContent;
   document.getElementById("doneOut").textContent = `${QUESTIONS.length}/${QUESTIONS.length}`;
 }
 </script>
