@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Topic 6 Game — Structure & Functions of the Federal Government (CS 12, 13, 15)</title>
+<title>Topic 6 Game — Structure & Functions of the Federal Government (CS 12, 13, 14, 15)</title>
 <style>
   :root{
     --bg:#0b1220;
@@ -313,7 +313,7 @@
   <header>
     <div class="titleRow">
       <div>
-        <h1>Topic 6 — Structure & Functions of the Federal Government (CS 12, 13, 15)</h1>
+        <h1>Topic 6 — Structure & Functions of the Federal Government (CS 12, 13, 14, 15)</h1>
         <div class="sub">
           Mastery rule: you must finish with <strong>100% accuracy</strong>. Wrong answers trigger an explanation until corrected.
           Choices are kept on-screen (no scrolling).
@@ -322,6 +322,7 @@
       <div class="pillRow">
         <div class="pill"><strong>CS12</strong> Branch powers (law & policy)</div>
         <div class="pill"><strong>CS13</strong> Dynamic interactions & checks</div>
+        <div class="pill"><strong>CS14</strong> Rights + responsibilities</div>
         <div class="pill"><strong>CS15</strong> Majority rule & minority rights</div>
       </div>
     </div>
@@ -410,7 +411,7 @@ function shuffleInPlace(a){
 }
 
 /* ========= Game Data =========
-   NOTE: Released-style items are included, plus supplements to cover every CE bullet for CS12/13/15.
+   NOTE: Released-style items are included, plus supplements to cover every CE bullet for CS12/13/14/15.
 */
 const QUESTIONS = [
   // --- CS12 released-style ---
@@ -602,6 +603,125 @@ const QUESTIONS = [
     explain:"Informal relationships (negotiation, communication, personal ties) can shape how branches collaborate or conflict."
   },
 
+  // =======================
+  // ✅ NEW: CS14 (10 items)
+  // =======================
+  {
+    cs:"CS14",
+    stem:"Which statement best defines a right in the U.S. constitutional system?",
+    choices:[
+      "A benefit the government may grant or remove at any time",
+      "A claim to protection from undue government intrusion in certain aspects of life",
+      "A privilege only available to people who hold public office",
+      "A rule that citizens must follow to avoid punishment"
+    ],
+    answer:1,
+    explain:"CS14 frames rights as claims to protection from undue governmental interference—limits on government intrusion into certain areas of life."
+  },
+  {
+    cs:"CS14",
+    stem:"Which list includes rights that most directly protect participation in the political process?",
+    choices:[
+      "Speech, press, assembly, petition, suffrage, and holding public office",
+      "Owning property, traveling between states, and choosing a career",
+      "Buying and selling goods, starting a business, and receiving a loan",
+      "Serving in the military, paying taxes, and obeying speed limits"
+    ],
+    answer:0,
+    explain:"CS14 highlights political-process rights: speech, press, assembly, petition, suffrage (voting), and holding public office."
+  },
+  {
+    cs:"CS14",
+    stem:"A student posts a strong political opinion online. Which responsibility is MOST closely tied to exercising free speech?",
+    choices:[
+      "Receiving firearms training",
+      "Engaging in civil discourse and respecting the rights of others",
+      "Serving on a jury when called",
+      "Paying a fee to vote"
+    ],
+    answer:1,
+    explain:"CS14 links specific responsibilities to specific rights. For speech, the key responsibility is civil discourse and respect for others’ rights."
+  },
+  {
+    cs:"CS14",
+    stem:"Which responsibility is MOST closely tied to the right to a jury trial?",
+    choices:[
+      "Registering to vote and becoming informed",
+      "Serving on juries when summoned",
+      "Receiving firearms training",
+      "Running for public office"
+    ],
+    answer:1,
+    explain:"CS14 specifically connects the right to a jury trial with the responsibility of jury service."
+  },
+  {
+    cs:"CS14",
+    stem:"Which responsibility is MOST closely tied to the right to bear arms?",
+    choices:[
+      "Receiving firearms training and using weapons responsibly",
+      "Writing letters to members of Congress",
+      "Serving in public office",
+      "Publishing editorials in a newspaper"
+    ],
+    answer:0,
+    explain:"CS14 notes that some rights carry responsibilities; for bearing arms, a key example is firearms training/responsible use."
+  },
+  {
+    cs:"CS14",
+    stem:"Which responsibility is MOST closely tied to the right to vote?",
+    choices:[
+      "Being informed on public issues and completing voter registration requirements",
+      "Negotiating treaties with foreign nations",
+      "Serving as a judge in a trial",
+      "Issuing executive orders"
+    ],
+    answer:0,
+    explain:"CS14 lists voting responsibilities such as registering to vote and being informed on public issues."
+  },
+  {
+    cs:"CS14",
+    stem:"The Supreme Court used the 14th Amendment’s due process clause to apply most Bill of Rights protections to states and local governments. This is called:",
+    choices:["Judicial supremacy","Incorporation","Nullification","Federal mandate"],
+    answer:1,
+    explain:"CS14 includes incorporation: using the 14th Amendment due process clause to apply most Bill of Rights protections to state/local governments."
+  },
+  {
+    cs:"CS14",
+    stem:"Which set includes general responsibilities of citizenship?",
+    choices:[
+      "Respecting the rule of law, paying taxes and fees, and accepting responsibility for one’s actions",
+      "Creating laws, declaring war, and imposing taxes",
+      "Negotiating treaties, nominating judges, and issuing pardons",
+      "Interpreting laws, hearing appeals, and issuing executive orders"
+    ],
+    answer:0,
+    explain:"CS14 identifies general responsibilities: rule of law, paying taxes/fees, and accepting responsibility for one’s actions."
+  },
+  {
+    cs:"CS14",
+    stem:"Which scenario best illustrates the idea that individual rights are relative, not absolute?",
+    choices:[
+      "A person uses speech to threaten violence, and the government restricts that conduct to protect others",
+      "Congress passes a tax bill after committee hearings",
+      "A court schedules oral arguments for an appeal",
+      "A governor signs a state budget"
+    ],
+    answer:0,
+    explain:"CS14 emphasizes balancing rights with others’ rights and the common good—rights are not unlimited in every circumstance."
+  },
+  {
+    cs:"CS14",
+    stem:"Which example best matches the idea of citizenship including service to the nation/state that guarantees rights?",
+    choices:[
+      "Serving in the military or participating in community service",
+      "Refusing to pay any taxes because rights are unlimited",
+      "Creating a new amendment by executive order",
+      "Declaring a law unconstitutional as a private citizen"
+    ],
+    answer:0,
+    explain:"CS14 notes citizenship can include service such as military service, community service, or serving in public office."
+  },
+
   // --- CS15 released-style + civil rights examples ---
   {
     cs:"CS15",
@@ -735,7 +855,6 @@ function updateTimer(){
 }
 function calcAccuracy(){
   // 100% accuracy means: every question must be correct on first try.
-  // We'll track "correctFirstTry" count vs total questions answered (not attempts).
   const total = state.totalQuestions || QUESTIONS.length;
   const pct = Math.round((state.correctFirstTry / total)*100);
   return pct;
@@ -856,7 +975,7 @@ function finishGame(){
 
   // Build ticket
   const lines = [];
-  lines.push(`TOPIC 6 — Structure & Functions of the Federal Government (CS 12, 13, 15)`);
+  lines.push(`TOPIC 6 — Structure & Functions of the Federal Government (CS 12, 13, 14, 15)`);
   lines.push(`Student: ${name}`);
   lines.push(`Start: ${el.startStamp.textContent}`);
   lines.push(`Finish: ${el.finishStamp.textContent}`);
