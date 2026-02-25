@@ -49,6 +49,7 @@ button{
   background:rgba(122,162,255,.15); color:var(--text); font-weight:700; cursor:pointer;
 }
 button:hover{background:rgba(122,162,255,.25)}
+button:disabled{opacity:.45; cursor:not-allowed}
 .stats{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
 .stat{
   flex:1 1 180px;
@@ -117,18 +118,22 @@ small{color:var(--muted)}
       <div>
         <label>Student Name</label>
         <input id="name" placeholder="Type first + last name" autocomplete="off"/>
+        <small id="resumeNote" class="hidden">We found an in-progress attempt on this device. Click <b>Resume</b> to continue.</small>
       </div>
       <div style="display:flex;gap:10px;align-items:end;flex-wrap:wrap">
-        <button id="startBtn">Start Game</button>
+        <button id="startBtn" disabled>Start Game</button>
+        <button id="resumeBtn" class="hidden">Resume</button>
         <button id="resetBtn">Reset</button>
       </div>
     </div>
     <small>In-game stats will stay visible while you play (date, start/finish, timer, accuracy, progress).</small>
   </div>
 
-  <!-- GAME (ALWAYS VISIBLE STATS LIKE TOPIC 8) -->
+  <!-- GAME -->
   <div class="card qbox hidden" id="game">
     <div class="stats" style="margin-top:0">
+      <div class="stat"><div class="k">Student</div><div class="v" id="studentS">—</div></div>
+      <div class="stat"><div class="k">Session</div><div class="v" id="sessionS">—</div></div>
       <div class="stat"><div class="k">Date</div><div class="v" id="dateS">—</div></div>
       <div class="stat"><div class="k">Start</div><div class="v" id="startT">—</div></div>
       <div class="stat"><div class="k">Finish</div><div class="v" id="finishT">—</div></div>
@@ -164,6 +169,11 @@ function timeFmt(s){return pad(Math.floor(s/60))+":"+pad(s%60)}
 function formatDate(d){ return d.toLocaleDateString(undefined,{year:"numeric",month:"short",day:"numeric"}); }
 function formatTime(d){ return d.toLocaleTimeString(undefined,{hour:"numeric",minute:"2-digit",second:"2-digit"}); }
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}}
+function uid(){
+  // short-ish session id for screenshots (not security, just friction)
+  return (Math.random().toString(36).slice(2,6) + "-" + Math.random().toString(36).slice(2,6)).toUpperCase();
+}
+const SAVE_KEY = "topic9_econ_v1";
 
 /* ---------- QUESTIONS (30) ---------- */
 const QUESTIONS = [
@@ -350,6 +360,7 @@ const QUESTIONS = [
     "Provide consumer protections","Increase money in circulation","Lower interest rates","Reduce reserve requirements"
   ], a:0, e:"Many regulations aim to protect consumers (health/safety/clarity)."},
 
+
   {cs:"CS21", q:"Which statement best reflects the CS21 expectation?", c:[
     "Explain how the Federal Reserve uses monetary tools to regulate the money supply and encourage or slow growth",
     "Explain how Congress writes tax law only",
@@ -360,13 +371,18 @@ const QUESTIONS = [
 
 /* ---------- state ---------- */
 let state = {
+  studentName: "",
+  sessionId: "",
   i:0, sec:0, timer:null,
   firstTryCorrect:0, hadMiss:false,
-  startedAt:null, finishedAt:null
+  startedAt:null, finishedAt:null,
+  order:null // stores shuffled question indices
 };
 
+/* ---------- DOM ---------- */
 const nameI=document.getElementById("name");
 const startBtn=document.getElementById("startBtn");
+const resumeBtn=document.getElementById("resumeBtn");
 const resetBtn=document.getElementById("resetBtn");
 
 const setup=document.getElementById("setup");
@@ -381,6 +397,8 @@ const timerEl=document.getElementById("timer");
 const accEl=document.getElementById("acc");
 const progEl=document.getElementById("prog");
 
+const studentS=document.getElementById("studentS");
+const sessionS=document.getElementById("sessionS");
 const dateS=document.getElementById("dateS");
 const startT=document.getElementById("startT");
 const finishT=document.getElementById("finishT");
@@ -390,6 +408,34 @@ const exp=document.getElementById("exp");
 const closeM=document.getElementById("closeM");
 const ticket=document.getElementById("ticket");
 
+const resumeNote=document.getElementById("resumeNote");
+
+/* ---------- persistence ---------- */
+function save(){
+  const payload = {
+    studentName: state.studentName,
+    sessionId: state.sessionId,
+    i: state.i,
+    sec: state.sec,
+    firstTryCorrect: state.firstTryCorrect,
+    startedAt: state.startedAt ? state.startedAt.toISOString() : null,
+    finishedAt: state.finishedAt ? state.finishedAt.toISOString() : null,
+    order: state.order
+  };
+  localStorage.setItem(SAVE_KEY, JSON.stringify(payload));
+}
+function load(){
+  try{
+    const raw = localStorage.getItem(SAVE_KEY);
+    if(!raw) return null;
+    return JSON.parse(raw);
+  }catch(e){ return null; }
+}
+function clearSave(){
+  localStorage.removeItem(SAVE_KEY);
+}
+
+/* ---------- quiz helpers ---------- */
 function updateStats(){
   const total = QUESTIONS.length;
   const shown = Math.min(state.i + 1, total);
@@ -398,8 +444,13 @@ function updateStats(){
   qnum.textContent = `Question ${shown}/${total}`;
 }
 
+function currentQuestion(){
+  const idx = state.order[state.i];
+  return QUESTIONS[idx];
+}
+
 function render(){
-  const q = QUESTIONS[state.i];
+  const q = currentQuestion();
   state.hadMiss = false;
 
   cs.textContent = q.cs;
@@ -419,6 +470,7 @@ function render(){
       if(pos===correctPos){
         if(!state.hadMiss) state.firstTryCorrect++;
         state.i++;
+        save();
         if(state.i < QUESTIONS.length){
           updateStats();
           render();
@@ -429,6 +481,7 @@ function render(){
         state.hadMiss = true;
         exp.textContent = q.e;
         modal.classList.remove("hidden");
+        save();
       }
       updateStats();
     };
@@ -438,9 +491,12 @@ function render(){
   updateStats();
 }
 
-function start(){
+function startFresh(){
   const nm = nameI.value.trim();
   if(!nm) return alert("Enter your name.");
+
+  state.studentName = nm;
+  state.sessionId = uid();
 
   state.i = 0;
   state.sec = 0;
@@ -449,6 +505,14 @@ function start(){
 
   state.startedAt = new Date();
   state.finishedAt = null;
+
+  // fixed order (shuffled indices) so resume works consistently
+  state.order = Array.from({length: QUESTIONS.length}, (_,i)=>i);
+  shuffle(state.order);
+
+  // UI
+  studentS.textContent = state.studentName;
+  sessionS.textContent = state.sessionId;
 
   dateS.textContent = formatDate(state.startedAt);
   startT.textContent = formatTime(state.startedAt);
@@ -460,14 +524,52 @@ function start(){
   setup.style.display="none";
   game.classList.remove("hidden");
 
-  shuffle(QUESTIONS);
+  if(state.timer) clearInterval(state.timer);
+  state.timer = setInterval(()=>{
+    state.sec++;
+    timerEl.textContent = timeFmt(state.sec);
+    save();
+  },1000);
+
+  save();
+  render();
+}
+
+function resumeSaved(saved){
+  // restore
+  state.studentName = saved.studentName || "";
+  state.sessionId = saved.sessionId || uid();
+  state.i = Number(saved.i || 0);
+  state.sec = Number(saved.sec || 0);
+  state.firstTryCorrect = Number(saved.firstTryCorrect || 0);
+  state.startedAt = saved.startedAt ? new Date(saved.startedAt) : new Date();
+  state.finishedAt = saved.finishedAt ? new Date(saved.finishedAt) : null;
+  state.order = Array.isArray(saved.order) && saved.order.length===QUESTIONS.length
+    ? saved.order
+    : Array.from({length: QUESTIONS.length}, (_,i)=>i);
+
+  // UI
+  studentS.textContent = state.studentName || "—";
+  sessionS.textContent = state.sessionId || "—";
+
+  dateS.textContent = formatDate(state.startedAt);
+  startT.textContent = formatTime(state.startedAt);
+  finishT.textContent = state.finishedAt ? formatTime(state.finishedAt) : "—";
+  timerEl.textContent = timeFmt(state.sec);
+  ticket.classList.add("hidden");
+  ticket.textContent = "";
+
+  setup.style.display="none";
+  game.classList.remove("hidden");
 
   if(state.timer) clearInterval(state.timer);
   state.timer = setInterval(()=>{
     state.sec++;
     timerEl.textContent = timeFmt(state.sec);
+    save();
   },1000);
 
+  save();
   render();
 }
 
@@ -478,23 +580,59 @@ function finish(){
 
   if(state.firstTryCorrect !== QUESTIONS.length){
     alert("You finished, but mastery requires 100% FIRST-TRY accuracy. Hit Reset and try again.");
+    save();
     return;
   }
 
   ticket.classList.remove("hidden");
   ticket.textContent =
 `TOPIC 9 — SUBMIT TICKET
+Student: ${state.studentName}
+Session: ${state.sessionId}
 Date: ${formatDate(state.startedAt)}
 Start: ${formatTime(state.startedAt)}
 Finish: ${formatTime(state.finishedAt)}
 Total time: ${timerEl.textContent}
 Accuracy: 100% (First-Try Mastery)
 Questions completed: ${QUESTIONS.length}/${QUESTIONS.length}`;
+
+  save();
 }
 
-startBtn.onclick=start;
-resetBtn.onclick=()=>location.reload();
+/* ---------- events ---------- */
+nameI.addEventListener("input", ()=>{
+  startBtn.disabled = !nameI.value.trim();
+});
+
+startBtn.onclick = startFresh;
+
+resumeBtn.onclick = ()=>{
+  const saved = load();
+  if(!saved || !saved.studentName){
+    return alert("No saved attempt found.");
+  }
+  resumeSaved(saved);
+};
+
+resetBtn.onclick = ()=>{
+  clearSave();
+  location.reload();
+};
+
 closeM.onclick=()=>modal.classList.add("hidden");
+
+/* ---------- boot: detect resume ---------- */
+(function init(){
+  const saved = load();
+  if(saved && saved.studentName && saved.startedAt && !saved.finishedAt){
+    // show resume option
+    resumeBtn.classList.remove("hidden");
+    resumeNote.classList.remove("hidden");
+    // prefill name to match (helps students notice)
+    nameI.value = saved.studentName;
+    startBtn.disabled = !nameI.value.trim();
+  }
+})();
 </script>
 </body>
 </html>
